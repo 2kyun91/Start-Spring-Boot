@@ -1,5 +1,6 @@
 package com.start.springboot.domain.post;
 
+import com.querydsl.core.Tuple;
 import com.start.springboot.domain.board.BoardRepositoryTests;
 import com.start.springboot.domain.board.entity.Board;
 import com.start.springboot.domain.post.entity.Post;
@@ -15,6 +16,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.util.ObjectUtils;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @SpringBootTest
@@ -62,8 +65,8 @@ public class PostRepositoryTests {
 //        post.setPostTitle("오늘의 날씨");
 //        post.setPostContent("태풍의 영향으로 습한 날씨입니다.");
 //        post.setPostWriter("자바");
-        post.setPostTitle("오늘은 8월 둘째주 토요일입니다.");
-        post.setPostContent("밖에 나가지 않고 집에서 공부 중입니다.");
+        post.setPostTitle("오늘은 8월 셋째주 월요일입니다.");
+        post.setPostContent("독서실에 와서 공부 중입니다.");
         post.setPostWriter("자바");
 
         postService.writePost(post);
@@ -133,6 +136,33 @@ public class PostRepositoryTests {
             System.out.println("총 페이지 수 : " + post.getTotalPages());
             System.out.println("총 게시글 수 : " + post.getTotalElements());
             System.out.println("다음 페이지 : " + post.nextPageable());
+        } else {
+            System.out.println("조회된 게시글이 없습니다.");
+        }
+    }
+
+    @Test
+    public void testGetPostByTitleContainingAndPostIdLessThan() {
+        Pageable pageable = PageRequest.of(0, 10, Sort.Direction.DESC, "postId");
+        Page<Post> post = postService.getPostByTitleContainingAndPostIdLessThan("테스트 글 제목",51L, pageable);
+        if (!post.isEmpty()) {
+            post.forEach(p -> System.out.println(p));
+            System.out.println("페이지당 게시글 수 : " + post.getSize());
+            System.out.println("총 페이지 수 : " + post.getTotalPages());
+            System.out.println("총 게시글 수 : " + post.getTotalElements());
+            System.out.println("다음 페이지 : " + post.nextPageable());
+        } else {
+            System.out.println("조회된 게시글이 없습니다.");
+        }
+    }
+
+    @Test
+    public void testGetPostByTitleAndPostIdGreaterThan() {
+        List<Tuple> post = postService.getPostByTitleAndPostIdGreaterThan("테스트 글 제목 150", 100L);
+        if (!post.isEmpty()) {
+//            post.forEach(p -> System.out.println(Arrays.toString(p)));
+            post.forEach(p -> System.out.println(p)); // dto 클래스 만들어서 뽑아보기
+            System.out.println(post.size() + "개의 게시글을 조회하였습니다.");
         } else {
             System.out.println("조회된 게시글이 없습니다.");
         }
