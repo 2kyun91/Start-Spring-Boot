@@ -1,8 +1,11 @@
 package com.start.springboot.domain.board.entity;
 
-import javax.validation.constraints.NotNull;
+import com.start.springboot.domain.board.dto.BoardDto;
+import com.start.springboot.domain.navigation.entity.NavBar;
+import com.start.springboot.domain.post.entity.Post;
+import lombok.Builder;
 import lombok.Getter;
-import lombok.Setter;
+import lombok.NoArgsConstructor;
 import lombok.ToString;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.CreationTimestamp;
@@ -10,14 +13,18 @@ import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.sql.Timestamp;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 /**
  * 게시판 엔티티 
  */
 @Getter
-@Setter
+//@Setter
 @ToString
+@NoArgsConstructor
 @Entity
 @DynamicInsert
 @Table(name = "tb_board")
@@ -27,14 +34,19 @@ public class Board {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator="BOARD_SEQ_GENERATOR")
     private Long boardId; /* 게시판 Id */
 
-    @NotNull
-    private Long board_NavBarId; /* 게시판 구분 (외래키 설정 필요)*/
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "board_navBar_id") // navBarId 변수 만들고 이 변수를 외래키로 사용하게 바꿔보기
+    private NavBar navBar; /* 게시판 구분 */
+
+    @ToString.Exclude
+    @OneToMany(mappedBy = "board", cascade = CascadeType.ALL)
+    private Set<Post> posts = new LinkedHashSet<>();
 
     @NotNull
     private String boardName; /* 게시판 이름 */
 
     @ColumnDefault("'Y'")
-    private String boardUseYN; /* 게시판 사용여부 */
+    private String boardUseYn; /* 게시판 사용여부 */
 
     @NotNull
     private String boardCreateUser; /* 게시판 생성자 */
@@ -46,4 +58,31 @@ public class Board {
 
     @UpdateTimestamp
     private Timestamp boardUpdateDate; /* 게시판 수정일 */
+
+    @Builder(toBuilder = true)
+    public Board(Long boardId, NavBar navBar, /*@Singular*/ Set<Post> posts, String boardName, String boardUseYn, String boardCreateUser, String boardUpdateUser, Timestamp boardCreateDate, Timestamp boardUpdateDate) {
+        this.boardId = boardId;
+        this.navBar = navBar;
+        this.posts = posts;
+        this.boardName = boardName;
+        this.boardUseYn = boardUseYn;
+        this.boardCreateUser = boardCreateUser;
+        this.boardUpdateUser = boardUpdateUser;
+        this.boardCreateDate = boardCreateDate;
+        this.boardUpdateDate = boardUpdateDate;
+    }
+
+    public BoardDto toDto(Board board) {
+        BoardDto boardDto = new BoardDto();
+        boardDto.setBoardId(board.getBoardId());
+        boardDto.setNavBar(board.getNavBar());
+        boardDto.setPosts(board.getPosts());
+        boardDto.setBoardName(board.getBoardName());
+        boardDto.setBoardUseYn(board.getBoardUseYn());
+        boardDto.setBoardCreateUser(board.getBoardCreateUser());
+        boardDto.setBoardUpdateUser(board.getBoardUpdateUser());
+        boardDto.setBoardCreateDate(board.getBoardCreateDate());
+        boardDto.setBoardUpdateDate(board.getBoardUpdateDate());
+        return boardDto;
+    }
 }

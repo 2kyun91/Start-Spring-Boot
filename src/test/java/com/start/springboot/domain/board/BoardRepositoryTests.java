@@ -1,15 +1,18 @@
 package com.start.springboot.domain.board;
 
+import com.start.springboot.domain.board.dto.BoardDto;
 import com.start.springboot.domain.board.entity.Board;
 import com.start.springboot.domain.board.service.BoardService;
 import com.start.springboot.domain.navigation.NavBarRepositoryTests;
-import com.start.springboot.domain.navigation.entity.NavBar;
+import com.start.springboot.domain.navigation.dto.NavBarDto;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Import;
 import org.springframework.util.ObjectUtils;
+
+import java.sql.Timestamp;
 
 @SpringBootTest
 @TestConfiguration
@@ -39,24 +42,45 @@ public class BoardRepositoryTests {
     }
 
     @Test
-    public Board testGetBoard(Long boardId) {
+    public BoardDto testGetBoard(Long boardId) {
+        BoardDto boardDto = new BoardDto();
         Board board = boardService.getBoard(boardId);
         if (ObjectUtils.isEmpty(board)) {
-            board = testCreateBoard();
+            boardDto = testCreateBoard();
+        } else {
+            boardDto = board.toDto(board);
         }
-        return board;
+        return boardDto;
     }
 
     @Test
-    public Board testCreateBoard() {
-        NavBar navBar = navBarRepositoryTests.getNavBar("테스트", "");
-        Board board = new Board();
-        board.setBoard_NavBarId(navBar.getNavBarId());
-        board.setBoardName("임시 게시판");
-        board.setBoardCreateUser("자바");
+    public void testGetBoardReturnDto() {
+        boardService.getBoardReturnDto(1L);
+    }
 
-        board = boardService.createBoard(board);
-        System.out.println(board);
-        return board;
+    @Test
+    public BoardDto testCreateBoard() {
+        NavBarDto navBarDto = new NavBarDto();
+        navBarDto.setNavBarGnb("테스트");
+        navBarDto = navBarRepositoryTests.testGetNavBar(navBarDto);
+
+        BoardDto boardDto = new BoardDto();
+        boardDto.setNavBar(navBarDto.toEntity());
+        boardDto.setBoardName("임시 게시판");
+        boardDto.setBoardCreateUser("자바");
+
+        Board board = boardService.createBoard(boardDto);
+        boardDto = board.toDto(board);
+        return boardDto;
+    }
+
+    @Test
+    public void testUpdateBoard() {
+        BoardDto boardDto = new BoardDto();
+        boardDto.setBoardId(1L);
+        boardDto.setBoardName("테스트 게시판 수정2");
+        boardDto.setBoardUpdateUser("스프링");
+        boardDto.setBoardUpdateDate(new Timestamp(System.currentTimeMillis()));
+        boardService.updateBoard(boardDto);
     }
 }

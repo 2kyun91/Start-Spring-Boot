@@ -7,6 +7,7 @@ import com.querydsl.core.types.dsl.*;
 import com.querydsl.core.types.PathMetadata;
 import javax.annotation.Generated;
 import com.querydsl.core.types.Path;
+import com.querydsl.core.types.dsl.PathInits;
 
 
 /**
@@ -17,9 +18,9 @@ public class QBoard extends EntityPathBase<Board> {
 
     private static final long serialVersionUID = -638626217L;
 
-    public static final QBoard board = new QBoard("board");
+    private static final PathInits INITS = PathInits.DIRECT2;
 
-    public final NumberPath<Long> board_NavBarId = createNumber("board_NavBarId", Long.class);
+    public static final QBoard board = new QBoard("board");
 
     public final DateTimePath<java.sql.Timestamp> boardCreateDate = createDateTime("boardCreateDate", java.sql.Timestamp.class);
 
@@ -33,18 +34,31 @@ public class QBoard extends EntityPathBase<Board> {
 
     public final StringPath boardUpdateUser = createString("boardUpdateUser");
 
-    public final StringPath boardUseYN = createString("boardUseYN");
+    public final StringPath boardUseYn = createString("boardUseYn");
+
+    public final com.start.springboot.domain.navigation.entity.QNavBar navBar;
+
+    public final SetPath<com.start.springboot.domain.post.entity.Post, com.start.springboot.domain.post.entity.QPost> posts = this.<com.start.springboot.domain.post.entity.Post, com.start.springboot.domain.post.entity.QPost>createSet("posts", com.start.springboot.domain.post.entity.Post.class, com.start.springboot.domain.post.entity.QPost.class, PathInits.DIRECT2);
 
     public QBoard(String variable) {
-        super(Board.class, forVariable(variable));
+        this(Board.class, forVariable(variable), INITS);
     }
 
     public QBoard(Path<? extends Board> path) {
-        super(path.getType(), path.getMetadata());
+        this(path.getType(), path.getMetadata(), PathInits.getFor(path.getMetadata(), INITS));
     }
 
     public QBoard(PathMetadata metadata) {
-        super(Board.class, metadata);
+        this(metadata, PathInits.getFor(metadata, INITS));
+    }
+
+    public QBoard(PathMetadata metadata, PathInits inits) {
+        this(Board.class, metadata, inits);
+    }
+
+    public QBoard(Class<? extends Board> type, PathMetadata metadata, PathInits inits) {
+        super(type, metadata, inits);
+        this.navBar = inits.isInitialized("navBar") ? new com.start.springboot.domain.navigation.entity.QNavBar(forProperty("navBar")) : null;
     }
 
 }

@@ -1,5 +1,6 @@
 package com.start.springboot.domain.navigation.service;
 
+import com.start.springboot.domain.navigation.dto.NavBarDto;
 import com.start.springboot.domain.navigation.entity.NavBar;
 import com.start.springboot.domain.navigation.repository.NavbarRepository;
 import lombok.RequiredArgsConstructor;
@@ -12,20 +13,16 @@ import org.springframework.transaction.annotation.Transactional;
 public class NavBarService {
     private final NavbarRepository navbarRepository;
 
-    public NavBar getNavBar(String navBarGnb, String nabBarLnb) {
-        NavBar navBar = navbarRepository.findByNavBarGnb(navBarGnb).orElseGet(
-                () -> navbarRepository.save(createNavBar(navBarGnb, nabBarLnb))
+    public NavBarDto getNavBar(NavBarDto navBarDto) {
+        NavBar navBar = navbarRepository.findByNavBarGnb(navBarDto.getNavBarGnb()).orElseGet(
+                () -> navbarRepository.save(createNavBar(navBarDto))
         );
-        return navBar;
+        return navBar.toDto(navBar);
     }
 
-    public NavBar createNavBar(String navBarGnb, String nabBarLnb) {
-        NavBar navBar = new NavBar();
-        navBar.setNavBarGnb(navBarGnb);
-        if (!nabBarLnb.isEmpty()) {
-            navBar.setNabBarLnb(nabBarLnb);
-        }
-        navbarRepository.save(navBar);
+    public NavBar createNavBar(NavBarDto navBarDto) {
+        NavBar navBar = navBarDto.toEntity();
+        navBar = navbarRepository.save(navBar);
         return navBar;
     }
 }

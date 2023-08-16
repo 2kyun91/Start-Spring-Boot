@@ -1,6 +1,6 @@
 package com.start.springboot.domain.navigation;
 
-import com.start.springboot.domain.navigation.entity.NavBar;
+import com.start.springboot.domain.navigation.dto.NavBarDto;
 import com.start.springboot.domain.navigation.service.NavBarService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,8 +18,8 @@ public class NavBarRepositoryTests {
     }
 
     @Test
-    public NavBar getNavBar(String navBarGnb, String nabBarLnb) {
-        NavBar navBar = navBarService.getNavBar(navBarGnb, nabBarLnb);
-        return navBar;
+    public NavBarDto testGetNavBar(NavBarDto navBarDto) {
+        navBarDto = navBarService.getNavBar(navBarDto);
+        return navBarDto;
     }
 }
