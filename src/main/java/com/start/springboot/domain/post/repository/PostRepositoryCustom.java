@@ -1,5 +1,6 @@
 package com.start.springboot.domain.post.repository;
 
+import com.querydsl.core.Tuple;
 import com.start.springboot.domain.post.dto.PostDto;
 import com.start.springboot.domain.post.entity.Post;
 import org.springframework.data.domain.Page;
@@ -19,4 +20,6 @@ public interface PostRepositoryCustom {
     public Page<PostDto> findByPostTitleContainingAndPostIdLessThan(String postTitle, Long postIdLess, Pageable pageable);
 
     public List<PostDto> findByPostTitleAndPostIdGreaterThan(String postTitle, Long postIdGreater);
+
+    public List<Tuple> findByPostTitleAndPostIdGreaterThan2(String postTitle, Long postIdGreater);
 }

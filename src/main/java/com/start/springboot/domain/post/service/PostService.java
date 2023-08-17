@@ -1,5 +1,6 @@
 package com.start.springboot.domain.post.service;
 
+import com.querydsl.core.Tuple;
 import com.start.springboot.domain.post.dto.PostDto;
 import com.start.springboot.domain.post.entity.Post;
 import com.start.springboot.domain.post.repository.PostRepository;
@@ -64,5 +65,9 @@ public class PostService {
 
     public List<PostDto> getPostByTitleAndPostIdGreaterThan(String postTitle, Long postId) {
         return postRepository.findByPostTitleAndPostIdGreaterThan(postTitle, postId);
+    }
+
+    public List<Tuple> getPostByTitleAndPostIdGreaterThan2(String postTitle, Long postId) {
+        return postRepository.findByPostTitleAndPostIdGreaterThan2(postTitle, postId);
     }
 }

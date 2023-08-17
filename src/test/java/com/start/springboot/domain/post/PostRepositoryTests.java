@@ -18,6 +18,8 @@ import org.springframework.data.domain.Sort;
 import org.springframework.util.ObjectUtils;
 
 import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 
@@ -164,6 +166,18 @@ public class PostRepositoryTests {
         if (!postDtos.isEmpty()) {
             postDtos.forEach(p -> System.out.println(p));
             System.out.println(postDtos.size() + "개의 게시글을 조회하였습니다.");
+        } else {
+            System.out.println("조회된 게시글이 없습니다.");
+        }
+    }
+
+    @Test
+    public void testGetPostByTitleAndPostIdGreaterThan2() {
+        List<Tuple> result = postService.getPostByTitleAndPostIdGreaterThan2("테스트 게시글 150", 100L);
+        if (!result.isEmpty()) {
+//            ArrayList arrayList = new ArrayList(Arrays.asList(result.toArray()));
+            result.forEach(r -> Arrays.stream(r.toArray()).forEach(System.out::println));
+            System.out.println(result.size() + "개의 게시글을 조회하였습니다.");
         } else {
             System.out.println("조회된 게시글이 없습니다.");
         }

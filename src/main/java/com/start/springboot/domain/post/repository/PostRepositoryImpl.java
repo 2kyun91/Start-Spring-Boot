@@ -1,6 +1,7 @@
 package com.start.springboot.domain.post.repository;
 
 
+import com.querydsl.core.Tuple;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -94,6 +95,15 @@ public class PostRepositoryImpl implements PostRepositoryCustom {
     public List<PostDto> findByPostTitleAndPostIdGreaterThan(String postTitle, Long postIdGreater) {
         return jpaQueryFactory
                 .select(Projections.fields(PostDto.class, post.postTitle, post.postWriter, post.postContent, post.postCreateDate))
+                .from(post)
+                .where(post.postTitle.eq(postTitle), post.postId.gt(postIdGreater))
+                .fetch();
+    }
+
+    @Override
+    public List<Tuple> findByPostTitleAndPostIdGreaterThan2(String postTitle, Long postIdGreater) {
+        return jpaQueryFactory
+                .select(post.postTitle, post.postWriter, post.postContent, post.postCreateDate)
                 .from(post)
                 .where(post.postTitle.eq(postTitle), post.postId.gt(postIdGreater))
                 .fetch();
