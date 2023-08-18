@@ -1,6 +1,8 @@
 package com.start.springboot.domain.post;
 
 import com.querydsl.core.Tuple;
+import com.start.springboot.domain.attach.dto.AttachDto;
+import com.start.springboot.domain.attach.entity.Attach;
 import com.start.springboot.domain.board.BoardRepositoryTests;
 import com.start.springboot.domain.board.dto.BoardDto;
 import com.start.springboot.domain.post.dto.PostDto;
@@ -18,10 +20,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.util.ObjectUtils;
 
 import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @SpringBootTest
 @Import({BoardRepositoryTests.class})
@@ -104,7 +103,7 @@ public class PostRepositoryTests {
 
     @Test
     public void testDeletePost() {
-        postService.deletePost(5L);
+        postService.deletePost(1001L);
     }
 
     @Test
@@ -181,5 +180,26 @@ public class PostRepositoryTests {
         } else {
             System.out.println("조회된 게시글이 없습니다.");
         }
+    }
+
+    @Test
+    public void testCreatePostIncludeAttach() {
+        BoardDto boardDto = boardRepositoryTests.testGetBoard(1L);
+
+        PostDto postDto = new PostDto();
+        postDto.setPostTitle("오늘은 8월 셋째주 금요일입니다.");
+        postDto.setPostContent("독서실에 와서 공부 중입니다.");
+        postDto.setPostWriter("자바");
+        postDto.setBoard(boardDto.toEntity());
+
+        Set<Attach> attaches = new LinkedHashSet<>();
+        AttachDto attachDto = new AttachDto();
+        attachDto.setAttachPath("C:\\Desktop\\img\\testImg.img");
+        attaches.add(attachDto.toEntity());
+
+        postDto.setAttaches(attaches);
+        postService.createPost(postDto);
+
+        // 여기서 부터 이어서...
     }
 }

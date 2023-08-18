@@ -1,5 +1,6 @@
 package com.start.springboot.domain.post.entity;
 
+import com.start.springboot.domain.attach.entity.Attach;
 import com.start.springboot.domain.board.entity.Board;
 import com.start.springboot.domain.post.dto.PostDto;
 import lombok.Builder;
@@ -14,6 +15,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.sql.Timestamp;
+import java.util.Set;
 
 /**
  * 게시글 엔티티
@@ -34,6 +36,10 @@ public class Post {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "post_board_id")
     private Board board; /* 게시판 Id */
+
+    @ToString.Exclude
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
+    private Set<Attach> attaches; /* 게시글 내 첨부파일 */
 
     private String postTitle; /* 게시글 제목 */
 
@@ -62,9 +68,10 @@ public class Post {
     //private Set<AttachFile> attachFile = new LinkedHashSet<>();
 
     @Builder(toBuilder = true)
-    public Post(Long postId, Board board, String postTitle, String postContent, String postShowYn, String postWriter, int postViewCount, Timestamp postCreateDate, Timestamp postUpdateDate) {
+    public Post(Long postId, Board board, Set<Attach> attaches, String postTitle, String postContent, String postShowYn, String postWriter, int postViewCount, Timestamp postCreateDate, Timestamp postUpdateDate) {
         this.postId = postId;
         this.board = board;
+        this.attaches = attaches;
         this.postTitle = postTitle;
         this.postContent = postContent;
         this.postShowYn = postShowYn;
@@ -78,6 +85,7 @@ public class Post {
         PostDto postDto = new PostDto();
         postDto.setPostId(post.getPostId());
         postDto.setBoard(post.getBoard());
+        postDto.setAttaches(post.getAttaches());
         postDto.setPostTitle(post.getPostTitle());
         postDto.setPostContent(post.getPostContent());
         postDto.setPostShowYn(post.getPostShowYn());

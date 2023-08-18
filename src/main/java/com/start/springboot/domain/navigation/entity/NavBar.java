@@ -17,22 +17,21 @@ import java.util.Set;
 @ToString
 @NoArgsConstructor
 @Entity
-@Data
 @Table(name = "tb_nav_bar")
 @SequenceGenerator(name = "NAVBAR_SEQ_GENERATOR", sequenceName = "navBar_seq", initialValue = 1, allocationSize = 1)
 public class NavBar {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator="NAVBAR_SEQ_GENERATOR")
-    private Long navBarId;
+    private Long navBarId; /* 네비게이션바 Id */
 
     @NotNull
-    private String navBarGnb; /* Gnb */
+    private String navBarGnb; /* 네비게이션바 Gnb */
 
-    private String navBarLnb; /* Lnb */
+    private String navBarLnb; /* 네비게이션바 Lnb */
 
     @ToString.Exclude
     @OneToMany(mappedBy = "navBar", cascade = CascadeType.ALL)
-    private Set<Board> boards = new LinkedHashSet<>();
+    private Set<Board> boards; /* 네비게이션바 내 게시판 */
 
     @Builder(toBuilder = true)
     public NavBar(Long navBarId, String navBarGnb, String navBarLnb, /*@Singular*/ Set<Board> boards) {

@@ -22,6 +22,8 @@ public class QPost extends EntityPathBase<Post> {
 
     public static final QPost post = new QPost("post");
 
+    public final SetPath<com.start.springboot.domain.attach.entity.Attach, com.start.springboot.domain.attach.entity.QAttach> attaches = this.<com.start.springboot.domain.attach.entity.Attach, com.start.springboot.domain.attach.entity.QAttach>createSet("attaches", com.start.springboot.domain.attach.entity.Attach.class, com.start.springboot.domain.attach.entity.QAttach.class, PathInits.DIRECT2);
+
     public final com.start.springboot.domain.board.entity.QBoard board;
 
     public final StringPath postContent = createString("postContent");

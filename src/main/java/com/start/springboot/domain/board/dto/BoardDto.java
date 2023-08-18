@@ -6,10 +6,8 @@ import com.start.springboot.domain.post.entity.Post;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
-import org.hibernate.annotations.CreationTimestamp;
 
 import java.sql.Timestamp;
-import java.util.LinkedHashSet;
 import java.util.Set;
 
 @Getter
@@ -20,7 +18,7 @@ public class BoardDto {
 
     private NavBar navBar;
 
-    private Set<Post> posts = new LinkedHashSet<>();
+    private Set<Post> posts;
 
     private String BoardName;
 

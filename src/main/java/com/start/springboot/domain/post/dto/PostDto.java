@@ -1,5 +1,6 @@
 package com.start.springboot.domain.post.dto;
 
+import com.start.springboot.domain.attach.entity.Attach;
 import com.start.springboot.domain.board.entity.Board;
 import com.start.springboot.domain.post.entity.Post;
 import lombok.Getter;
@@ -7,6 +8,7 @@ import lombok.Setter;
 import lombok.ToString;
 
 import java.sql.Timestamp;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -15,6 +17,8 @@ public class PostDto {
     private Long postId;
 
     private Board board;
+
+    private Set<Attach> attaches;
 
     private String postTitle;
 
@@ -34,6 +38,7 @@ public class PostDto {
         return Post.builder()
                 .postId(postId)
                 .board(board)
+                .attaches(attaches)
                 .postTitle(postTitle)
                 .postContent(postContent)
                 .postShowYn(postShowYn)

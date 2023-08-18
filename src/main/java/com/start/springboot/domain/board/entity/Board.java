@@ -15,7 +15,6 @@ import org.hibernate.annotations.UpdateTimestamp;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.sql.Timestamp;
-import java.util.LinkedHashSet;
 import java.util.Set;
 
 /**
@@ -40,7 +39,7 @@ public class Board {
 
     @ToString.Exclude
     @OneToMany(mappedBy = "board", cascade = CascadeType.ALL)
-    private Set<Post> posts = new LinkedHashSet<>();
+    private Set<Post> posts; /* 게시판 내 게시글 */
 
     @NotNull
     private String boardName; /* 게시판 이름 */

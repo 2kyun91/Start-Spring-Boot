@@ -12,6 +12,7 @@ import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Import;
 import org.springframework.util.ObjectUtils;
 
+import javax.transaction.Transactional;
 import java.sql.Timestamp;
 
 @SpringBootTest
@@ -51,6 +52,21 @@ public class BoardRepositoryTests {
             boardDto = board.toDto(board);
         }
         return boardDto;
+    }
+
+    /*
+    * LazyInitializationException 발생하는 이유 : Service 바깥단에서 호출 결과 받을 때 영속 컨텍스트도 종료되기 때문
+    * 해결 방법 : 해당하는 메소드에 @Transactional 선언, 또는 엔티티의 Fetch 전략을 Lazy에서 Eager로 변경 (후자 보다는 전자가 낫다.)
+    * */
+    @Test
+    @Transactional
+    public void testGetBoard2() {
+        BoardDto boardDto = new BoardDto();
+        Board board = boardService.getBoard(1L);
+        if (!ObjectUtils.isEmpty(board)) {
+            boardDto = board.toDto(board);
+            System.out.println(boardDto);
+        }
     }
 
     @Test
