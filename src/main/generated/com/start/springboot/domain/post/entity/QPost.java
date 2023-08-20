@@ -22,7 +22,7 @@ public class QPost extends EntityPathBase<Post> {
 
     public static final QPost post = new QPost("post");
 
-    public final SetPath<com.start.springboot.domain.attach.entity.Attach, com.start.springboot.domain.attach.entity.QAttach> attaches = this.<com.start.springboot.domain.attach.entity.Attach, com.start.springboot.domain.attach.entity.QAttach>createSet("attaches", com.start.springboot.domain.attach.entity.Attach.class, com.start.springboot.domain.attach.entity.QAttach.class, PathInits.DIRECT2);
+    public final ListPath<com.start.springboot.domain.attach.entity.Attach, com.start.springboot.domain.attach.entity.QAttach> attaches = this.<com.start.springboot.domain.attach.entity.Attach, com.start.springboot.domain.attach.entity.QAttach>createList("attaches", com.start.springboot.domain.attach.entity.Attach.class, com.start.springboot.domain.attach.entity.QAttach.class, PathInits.DIRECT2);
 
     public final com.start.springboot.domain.board.entity.QBoard board;
 
@@ -41,6 +41,8 @@ public class QPost extends EntityPathBase<Post> {
     public final NumberPath<Integer> postViewCount = createNumber("postViewCount", Integer.class);
 
     public final StringPath postWriter = createString("postWriter");
+
+    public final ListPath<com.start.springboot.domain.reply.entity.Reply, com.start.springboot.domain.reply.entity.QReply> replies = this.<com.start.springboot.domain.reply.entity.Reply, com.start.springboot.domain.reply.entity.QReply>createList("replies", com.start.springboot.domain.reply.entity.Reply.class, com.start.springboot.domain.reply.entity.QReply.class, PathInits.DIRECT2);
 
     public QPost(String variable) {
         this(Post.class, forVariable(variable), INITS);

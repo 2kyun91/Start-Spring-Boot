@@ -7,7 +7,7 @@ import lombok.Setter;
 import lombok.ToString;
 
 import java.sql.Timestamp;
-import java.util.Set;
+import java.util.List;
 
 @Getter
 @Setter
@@ -29,7 +29,7 @@ public class UserDto {
 
     private String userBlockYn;
 
-    private Set<Profile> profiles;
+    private List<Profile> profiles;
 
     private Timestamp userCountCreateDate;
 

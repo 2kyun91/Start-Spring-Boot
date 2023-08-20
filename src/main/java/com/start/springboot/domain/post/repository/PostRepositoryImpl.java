@@ -2,7 +2,9 @@ package com.start.springboot.domain.post.repository;
 
 
 import com.querydsl.core.Tuple;
+import com.querydsl.core.types.ExpressionUtils;
 import com.querydsl.core.types.Projections;
+import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.start.springboot.domain.post.dto.PostDto;
@@ -33,7 +35,7 @@ public class PostRepositoryImpl implements PostRepositoryCustom {
                 .execute();
     }
 
-    @Override
+    @Override /* select 칼럼에 엔티티 자제하기, 지금은 테스트를 위해 사용 */
     public List<Post> findByPostTitleContaining(String postTitle) {
         return jpaQueryFactory.select(post)
                 .from(post)
@@ -108,4 +110,20 @@ public class PostRepositoryImpl implements PostRepositoryCustom {
                 .where(post.postTitle.eq(postTitle), post.postId.gt(postIdGreater))
                 .fetch();
     }
+
+    @Override
+    public List<Tuple> findByPostWithAttachCountOrderByPostIdDesc(String postTitle) {
+        return jpaQueryFactory
+                .select(
+                        post.postTitle,
+                        ExpressionUtils.as(
+//                            JPAExpressions.select(post.attaches.size()).from(post),
+                                post.attaches.size(),
+                            "attachCount"
+                        )
+                ).from(post)
+                .where(post.postTitle.contains(postTitle))
+                .orderBy(post.postId.desc()).fetch();
+    }
 }
+

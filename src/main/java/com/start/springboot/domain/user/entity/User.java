@@ -14,8 +14,12 @@ import org.hibernate.annotations.UpdateTimestamp;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.sql.Timestamp;
+import java.util.List;
 import java.util.Set;
 
+/**
+ * 회원 엔티티
+ */
 @Getter
 @ToString
 @NoArgsConstructor
@@ -46,7 +50,7 @@ public class User {
 
     @ToString.Exclude
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-    private Set<Profile> profiles;
+    private List<Profile> profiles;
 
     @CreationTimestamp
     private Timestamp userCountCreateDate; /* 사용자 생성일 */
@@ -55,7 +59,7 @@ public class User {
     private Timestamp userCountUpdateDate; /* 사용자 수정일 */
 
     @Builder(toBuilder = true)
-    public User(String userId, String userPwd, String userName, String userNickName, String userEmail, String userPhNumber, String userBlockYn, Set<Profile> profiles, Timestamp userCountCreateDate, Timestamp userCountUpdateDate) {
+    public User(String userId, String userPwd, String userName, String userNickName, String userEmail, String userPhNumber, String userBlockYn, List<Profile> profiles, Timestamp userCountCreateDate, Timestamp userCountUpdateDate) {
         this.userId = userId;
         this.userPwd = userPwd;
         this.userName = userName;

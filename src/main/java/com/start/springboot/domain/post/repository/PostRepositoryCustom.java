@@ -22,4 +22,6 @@ public interface PostRepositoryCustom {
     public List<PostDto> findByPostTitleAndPostIdGreaterThan(String postTitle, Long postIdGreater);
 
     public List<Tuple> findByPostTitleAndPostIdGreaterThan2(String postTitle, Long postIdGreater);
+
+    public List<Tuple> findByPostWithAttachCountOrderByPostIdDesc(String postTitle);
 }

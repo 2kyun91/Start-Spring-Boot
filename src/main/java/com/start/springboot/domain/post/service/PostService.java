@@ -70,4 +70,8 @@ public class PostService {
     public List<Tuple> getPostByTitleAndPostIdGreaterThan2(String postTitle, Long postId) {
         return postRepository.findByPostTitleAndPostIdGreaterThan2(postTitle, postId);
     }
+
+    public List<Tuple> getPostWithAttachCountOrderByPostIdDesc(String postTitle) {
+        return postRepository.findByPostWithAttachCountOrderByPostIdDesc(postTitle);
+    }
 }

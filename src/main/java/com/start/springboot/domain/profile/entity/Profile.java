@@ -13,6 +13,9 @@ import org.hibernate.annotations.UpdateTimestamp;
 import javax.persistence.*;
 import java.sql.Timestamp;
 
+/**
+ * 프로필 엔티티
+ */
 @Getter
 @ToString
 @NoArgsConstructor

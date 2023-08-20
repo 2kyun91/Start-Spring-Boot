@@ -20,7 +20,7 @@ public class QUser extends EntityPathBase<User> {
 
     public static final QUser user = new QUser("user");
 
-    public final SetPath<com.start.springboot.domain.profile.entity.Profile, com.start.springboot.domain.profile.entity.QProfile> profiles = this.<com.start.springboot.domain.profile.entity.Profile, com.start.springboot.domain.profile.entity.QProfile>createSet("profiles", com.start.springboot.domain.profile.entity.Profile.class, com.start.springboot.domain.profile.entity.QProfile.class, PathInits.DIRECT2);
+    public final ListPath<com.start.springboot.domain.profile.entity.Profile, com.start.springboot.domain.profile.entity.QProfile> profiles = this.<com.start.springboot.domain.profile.entity.Profile, com.start.springboot.domain.profile.entity.QProfile>createList("profiles", com.start.springboot.domain.profile.entity.Profile.class, com.start.springboot.domain.profile.entity.QProfile.class, PathInits.DIRECT2);
 
     public final StringPath userBlockYn = createString("userBlockYn");
 

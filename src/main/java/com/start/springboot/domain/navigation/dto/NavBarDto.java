@@ -6,7 +6,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
-import java.util.Set;
+import java.util.List;
 
 @Getter
 @Setter
@@ -18,7 +18,7 @@ public class NavBarDto {
 
     private String navBarLnb;
 
-    private Set<Board> boards;
+    private List<Board> boards;
 
     public NavBar toEntity() {
         return NavBar.builder()

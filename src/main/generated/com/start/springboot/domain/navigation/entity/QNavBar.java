@@ -20,7 +20,7 @@ public class QNavBar extends EntityPathBase<NavBar> {
 
     public static final QNavBar navBar = new QNavBar("navBar");
 
-    public final SetPath<com.start.springboot.domain.board.entity.Board, com.start.springboot.domain.board.entity.QBoard> boards = this.<com.start.springboot.domain.board.entity.Board, com.start.springboot.domain.board.entity.QBoard>createSet("boards", com.start.springboot.domain.board.entity.Board.class, com.start.springboot.domain.board.entity.QBoard.class, PathInits.DIRECT2);
+    public final ListPath<com.start.springboot.domain.board.entity.Board, com.start.springboot.domain.board.entity.QBoard> boards = this.<com.start.springboot.domain.board.entity.Board, com.start.springboot.domain.board.entity.QBoard>createList("boards", com.start.springboot.domain.board.entity.Board.class, com.start.springboot.domain.board.entity.QBoard.class, PathInits.DIRECT2);
 
     public final StringPath navBarGnb = createString("navBarGnb");
 

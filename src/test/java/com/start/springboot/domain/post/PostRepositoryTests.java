@@ -3,6 +3,7 @@ package com.start.springboot.domain.post;
 import com.querydsl.core.Tuple;
 import com.start.springboot.domain.attach.dto.AttachDto;
 import com.start.springboot.domain.attach.entity.Attach;
+import com.start.springboot.domain.attach.service.AttachService;
 import com.start.springboot.domain.board.BoardRepositoryTests;
 import com.start.springboot.domain.board.dto.BoardDto;
 import com.start.springboot.domain.post.dto.PostDto;
@@ -17,20 +18,25 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.test.annotation.Commit;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.ObjectUtils;
 
 import java.sql.Timestamp;
 import java.util.*;
+import java.util.stream.IntStream;
 
 @SpringBootTest
 @Import({BoardRepositoryTests.class})
 public class PostRepositoryTests {
     private final PostService postService;
+    private final AttachService attachService;
     private final BoardRepositoryTests boardRepositoryTests;
 
     @Autowired
-    public PostRepositoryTests(PostService postService, BoardRepositoryTests boardRepositoryTests) {
+    public PostRepositoryTests(PostService postService, AttachService attachService, BoardRepositoryTests boardRepositoryTests) {
         this.postService = postService;
+        this.attachService = attachService;
         this.boardRepositoryTests = boardRepositoryTests;
     }
 
@@ -64,8 +70,8 @@ public class PostRepositoryTests {
         BoardDto boardDto = boardRepositoryTests.testGetBoard(1L);
 
         PostDto postDto = new PostDto();
-        postDto.setPostTitle("오늘은 8월 셋째주 수요일입니다.");
-        postDto.setPostContent("독서실에 와서 공부 중입니다.");
+        postDto.setPostTitle("오늘은 8월 셋째주 토요일입니다.");
+        postDto.setPostContent("주말이라 집에서 공부 중입니다.");
         postDto.setPostWriter("자바");
         postDto.setBoard(boardDto.toEntity());
         postService.createPost(postDto);
@@ -103,7 +109,7 @@ public class PostRepositoryTests {
 
     @Test
     public void testDeletePost() {
-        postService.deletePost(1001L);
+        postService.deletePost(204L);
     }
 
     @Test
@@ -192,14 +198,62 @@ public class PostRepositoryTests {
         postDto.setPostWriter("자바");
         postDto.setBoard(boardDto.toEntity());
 
-        Set<Attach> attaches = new LinkedHashSet<>();
+        postDto = postService.createPost(postDto);
+
         AttachDto attachDto = new AttachDto();
         attachDto.setAttachPath("C:\\Desktop\\img\\testImg.img");
-        attaches.add(attachDto.toEntity());
+        attachDto.setPost(postDto.toEntity());
 
-        postDto.setAttaches(attaches);
-        postService.createPost(postDto);
+        attachService.createAttach(attachDto);
+        System.out.println("첨부파일이 포함된 게시글 작성 완료");
+    }
 
-        // 여기서 부터 이어서...
+    @Test
+    @Transactional
+    @Commit
+    public void testUpdatePostIncludeAttach() {
+        Post post = postService.getPost(204L);
+        if (!ObjectUtils.isEmpty(post)) {
+            post.getAttaches().forEach(v -> {
+                AttachDto attachDto = new AttachDto();
+                attachDto.setAttachId(v.getAttachId());
+                attachDto.setAttachPath("C:\\test\\fakePath");
+                attachDto.setPost(post);
+                attachService.updateAttach(attachDto);
+            });
+        }
+    }
+
+    @Test
+    public void testDeleteAttach() {
+        attachService.deleteAttach(3L);
+    }
+
+    @Test
+    public void testCreateDummyPostIncludeAttach() {
+        BoardDto boardDto = boardRepositoryTests.testGetBoard(1L);
+
+        PostDto postDto = new PostDto();
+        postDto.setPostTitle("오늘은 8월 셋째주 일요일입니다.");
+        postDto.setPostContent("집에서 공부 중입니다.");
+        postDto.setPostWriter("자바");
+        postDto.setBoard(boardDto.toEntity());
+        postDto = postService.createPost(postDto);
+
+        List<Attach> attaches = new ArrayList<>();
+        for (int i = 1; i < 3; i++) {
+            AttachDto attachDto = new AttachDto();
+            attachDto.setAttachPath("C:\\Desktop\\img\\testImg" + i + ".img");
+            attachDto.setPost(postDto.toEntity());
+            attaches.add(attachDto.toEntity());
+        }
+
+        attachService.createDummyPostIncludeAttach(attaches);
+    }
+
+    @Test // 게시글 제목으로 해당 게시글과 첨부파일 수를 게시글 번호 역순으로 조회
+    public void testGetPostWithAttachCountOrderByPostIdDesc() {
+        List<Tuple> result = postService.getPostWithAttachCountOrderByPostIdDesc("오늘은");
+        System.out.println(result);
     }
 }
