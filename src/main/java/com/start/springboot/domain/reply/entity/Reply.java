@@ -28,29 +28,34 @@ import java.sql.Timestamp;
 public class Reply {
     @Id
     @GeneratedValue(generator = "REPLY_SEQ_GENERATOR", strategy = GenerationType.SEQUENCE)
-    private Long replyId;
+    private Long replyId; /* 댓글 Id */
 
-    private String replyContent;
+    private Long replyRelateId; /* 연계 댓글 Id */
 
     @NotNull
-    private String replyWriter;
+    private String replyContent; /* 댓글 내용 */
+
+    @NotNull
+    private String replyWriter; /* 댓글 작성자 */
 
     @ColumnDefault("'Y'")
-    private String replyShowYn;
+    private String replyShowYn; /* 댓글 노출 여부 */
 
+    @NotNull
     @ManyToOne
     @JoinColumn(name = "reply_post_id")
     private Post post;
 
     @CreationTimestamp
-    private Timestamp replyCreateDate;
+    private Timestamp replyCreateDate; /* 댓글 생성일 */
 
     @UpdateTimestamp
-    private Timestamp replyUpdateDate;
+    private Timestamp replyUpdateDate; /* 댓글 수정일 */
 
     @Builder
-    public Reply(Long replyId, String replyContent, String replyWriter, String replyShowYn, Post post, Timestamp replyCreateDate, Timestamp replyUpdateDate) {
+    public Reply(Long replyId, Long replyRelateId, String replyContent, String replyWriter, String replyShowYn, Post post, Timestamp replyCreateDate, Timestamp replyUpdateDate) {
         this.replyId = replyId;
+        this.replyRelateId = replyRelateId;
         this.replyContent = replyContent;
         this.replyWriter = replyWriter;
         this.replyShowYn = replyShowYn;
@@ -62,6 +67,7 @@ public class Reply {
     public ReplyDto toDto(Reply reply) {
         ReplyDto replyDto = new ReplyDto();
         replyDto.setReplyId(reply.getReplyId());
+        replyDto.setReplyRelateId(reply.getReplyRelateId());
         replyDto.setReplyContent(reply.getReplyContent());
         replyDto.setReplyWriter(reply.getReplyWriter());
         replyDto.setReplyShowYn(reply.getReplyShowYn());

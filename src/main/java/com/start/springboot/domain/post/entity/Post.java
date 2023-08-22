@@ -33,6 +33,7 @@ public class Post {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator="POST_SEQ_GENERATOR")
     private Long postId; /* 게시글 Id */
 
+    @NotNull
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "post_board_id")
     private Board board; /* 게시판 Id */

@@ -33,6 +33,7 @@ public class Attach {
     @ColumnDefault("'Y'")
     private String attachShowYn; /* 첨부파일 노출 여부 */
 
+    @NotNull
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "attach_post_id")
     private Post post;

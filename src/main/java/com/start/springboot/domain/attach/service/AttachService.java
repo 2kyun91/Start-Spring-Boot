@@ -28,7 +28,7 @@ public class AttachService {
         attachRepository.deleteById(attachId);
     }
 
-    public void createDummyPostIncludeAttach(List<Attach> attaches) {
+    public void createPostIncludeDummyAttaches(List<Attach> attaches) {
         attachRepository.saveAll(attaches);
     }
 }

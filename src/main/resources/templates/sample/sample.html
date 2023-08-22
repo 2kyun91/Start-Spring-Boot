@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{/layout/layout}">
+<div layout:fragment="content">
+<!--    <div th:insert="~{sample/header::header}"></div>-->
+
+    <h1 th:text="${msg}">Thymleaf 테스트 페이지</h1>
+<!--    <p th:text="${userInfo}">사용자 정보</p>-->
+    <h3><a th:href="@{/intro(p1='say', p2='Hello')}">사용자 정보</a></h3>
+
+    <script th:inline="javascript">
+        //var msg = [[${msg}]];
+        var msg = "[(${msg})]";
+    </script>
+
+    <table border="1" th:with="target='testUser'">
+        <tr>
+            <td>번호</td>
+            <td>Id</td>
+            <td>이름</td>
+            <td>이메일</td>
+            <td>가입일</td>
+        </tr>
+        <tr th:each="userDto, iter : ${userDtoList}">
+            <td th:text="${iter.count}"></td>
+<!--            <td th:text="${userDto.userId == target ? '관리자' : userDto.userId}"></td>-->
+            <td th:if="${userDto.userId}">
+                <a href="#" onclick="return false;" th:text="관리자" th:if="${userDto.userId == target}"></a>
+                <p th:text="${userDto.userId}" th:unless="${userDto.userId == target}">[(${userDto.userId})]</p>
+            </td>
+            <td th:text="${userDto.userName}"></td>
+            <td th:text="${userDto.userEmail}"></td>
+            <td th:text="${#dates.format(userDto.userCountCreateDate, 'yyyy-MM-dd')}"></td>
+        </tr>
+    </table>
+
+<!--    <div th:insert="~{sample/footer::footer}"></div>-->
+</div>
+
+<th:block layout:fragment="script">
+    <script th:inline="javascript">
+        //alert("안녕?");
+    </script>
+</th:block>
+</html>

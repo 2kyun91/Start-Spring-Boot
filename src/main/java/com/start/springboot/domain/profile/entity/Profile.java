@@ -11,6 +11,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.sql.Timestamp;
 
 /**
@@ -32,6 +33,7 @@ public class Profile {
     @ColumnDefault("'Y'")
     private String profileShowYn; /* 프로필 노출 여부 */
 
+    @NotNull
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "profile_user_id")
     private User user;

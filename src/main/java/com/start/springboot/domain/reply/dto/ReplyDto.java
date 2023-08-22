@@ -14,6 +14,8 @@ import java.sql.Timestamp;
 public class ReplyDto {
     private Long replyId;
 
+    private Long replyRelateId;
+
     private String replyContent;
 
     private String replyWriter;
@@ -29,6 +31,7 @@ public class ReplyDto {
     public Reply toEntity() {
         return Reply.builder()
                 .replyId(replyId)
+                .replyRelateId(replyRelateId)
                 .replyContent(replyContent)
                 .replyWriter(replyWriter)
                 .replyShowYn(replyShowYn)

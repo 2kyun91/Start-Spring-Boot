@@ -33,6 +33,7 @@ public class Board {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator="BOARD_SEQ_GENERATOR")
     private Long boardId; /* 게시판 Id */
 
+    @NotNull
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "board_navBar_id") // navBarId 변수 만들고 이 변수를 외래키로 사용하게 바꿔보기
     private NavBar navBar; /* 게시판 구분 */
