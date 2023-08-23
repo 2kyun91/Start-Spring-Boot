@@ -23,6 +23,11 @@ public class PostService {
         return postRepository.findById(postId).orElseGet(() -> null);
     }
 
+    public Page<PostDto> getAllPostByBoardMain(Pageable pageable) {
+        Page<PostDto> postDtoList = postRepository.getAllPostByBoardMain(pageable);
+        return postDtoList;
+    }
+
     public PostDto createPost(PostDto postDto) {
         Post post = postRepository.save(postDto.toEntity());
         return post.toDto(post);

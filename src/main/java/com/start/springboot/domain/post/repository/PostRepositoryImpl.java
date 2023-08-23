@@ -26,6 +26,46 @@ public class PostRepositoryImpl implements PostRepositoryCustom {
     private final JPAQueryFactory jpaQueryFactory;
 
     @Override
+    public Page<PostDto> getAllPostByBoardMain(Pageable pageable) {
+//        List<PostDto> postDtoList = jpaQueryFactory
+//                .select(
+//                    Projections.fields(
+//                        PostDto.class,
+//                        post.postId,
+//                        post.postTitle,
+//                        post.postContent,
+//                        post.postWriter,
+//                        post.postViewCount,
+//                        post.board, // 관계 있는 엔티티의 칼럼들과 합쳐진 dto 객체를 생성 해야될듯?!
+//                        post.replies,
+//                        post.attaches,
+//                        post.postCreateDate
+//                    )
+//                )
+//                .from(post)
+//                .where(post.postId.isNotNull())
+//                .offset(pageable.getOffset())
+//                .limit(pageable.getPageSize())
+//                .orderBy(post.postCreateDate.desc())
+//                .fetch();
+        List<Post> postList = jpaQueryFactory.selectFrom(post)
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .orderBy(post.postCreateDate.desc())
+                .fetch();
+
+        List<PostDto> postDtoList = new ArrayList<>();
+        if (!postList.isEmpty()) {
+            postList.forEach(p -> postDtoList.add(p.toDto(p)));
+        }
+
+        JPAQuery<Long> countQuery = jpaQueryFactory
+                .select(post.count())
+                .from(post);
+        return PageableExecutionUtils.getPage(postDtoList, pageable, countQuery::fetchOne);
+    }
+
+    @Override
     public long updatePost(Post postObj) {
         return jpaQueryFactory.update(post)
                 .set(post.postTitle, postObj.getPostTitle())

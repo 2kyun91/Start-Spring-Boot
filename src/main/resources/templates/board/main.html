@@ -1,0 +1,18 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{/layout/layout}">
+<div layout:fragment="content">
+    <h1>게시판 메인</h1>
+    <p>총 게시글 수 : [[${totalElements}]]</p>
+    <p>총 페이지 수 : [[${totalPages}]]</p>
+    <p>페이지당 게시글 수 : [[${pageSize}]]</p>
+    <p th:each="post, iter : ${postList}">
+        [[${post}]]
+        <br>
+    </p>
+</div>
+
+<th:block layout:fragment="script">
+    <script th:inline="javascript">
+    </script>
+</th:block>
+</html>
