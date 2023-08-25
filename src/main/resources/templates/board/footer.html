@@ -1,0 +1,14 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+    <div th:fragment="footer">
+        <th:block layout:fragment="script">
+            <script th:inline="javascript">
+                $(function(){
+                });
+                function changeListOrder(str) {
+                    alert(str);
+                }
+            </script>
+        </th:block>
+    </div>
+</html>

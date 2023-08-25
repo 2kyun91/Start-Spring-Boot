@@ -1,6 +1,7 @@
 package com.start.springboot.domain.post.repository;
 
 import com.querydsl.core.Tuple;
+import com.start.springboot.domain.post.dto.PostAllBoardDto;
 import com.start.springboot.domain.post.dto.PostDto;
 import com.start.springboot.domain.post.entity.Post;
 import org.springframework.data.domain.Page;
@@ -9,8 +10,6 @@ import org.springframework.data.domain.Pageable;
 import java.util.List;
 
 public interface PostRepositoryCustom {
-    public Page<PostDto> getAllPostByBoardMain(Pageable pageable);
-
     public long updatePost(Post post);
 
     public List<Post> findByPostTitleContaining(String postTitle);
@@ -26,4 +25,6 @@ public interface PostRepositoryCustom {
     public List<Tuple> findByPostTitleAndPostIdGreaterThan2(String postTitle, Long postIdGreater);
 
     public List<Tuple> findByPostWithAttachCountOrderByPostIdDesc(String postTitle);
+
+    public Page<PostAllBoardDto> getPostByAllBoard(Pageable pageable);
 }

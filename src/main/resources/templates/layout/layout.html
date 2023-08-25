@@ -8,6 +8,9 @@
     <meta content="" name="description">
     <meta content="" name="keywords">
 
+    <!-- jquery JS File -->
+    <script th:src="@{/jquery/jquery-3.7.0.min.js}"></script>
+
     <!-- Favicons -->
     <link th:href="@{/bootstrap/layout/img/favicon.png}" th:rel="icon">
     <link th:href="@{/bootstrap/layout/img/apple-touch-icon.png}" th:rel="apple-touch-icon">
@@ -23,6 +26,8 @@
     <link th:href="@{/bootstrap/layout/vendor/boxicons/css/boxicons.min.css}" rel="stylesheet">
     <link th:href="@{/bootstrap/layout/vendor/glightbox/css/glightbox.min.css}" rel="stylesheet">
     <link th:href="@{/bootstrap/layout/vendor/swiper/swiper-bundle.min.css}" rel="stylesheet">
+
+<!--    <link th:href="@{/bootstrap/layout/css/board_custom.css}" rel="stylesheet">-->
 
     <!-- Template Main CSS File -->
     <link th:href="@{/bootstrap/layout/css/style.css}" rel="stylesheet">
@@ -44,7 +49,8 @@
     <div class="d-flex flex-column">
         <div class="profile">
             <img th:src="@{/bootstrap/layout/img/gt500.jpg}" alt="" class="img-fluid rounded-circle">
-            <h1 class="text-light"><a href="#" onclick="return false;">김익현</a></h1>
+            <h1 class="text-light"><a href="#" onclick="return false;">Cia Opp</a></h1>
+            <h4 style="color: #fff;">Crisis is an Opportunity</h4>
             <div class="social-links mt-3 text-center">
                 <a href="#" class="twitter"><i class="bx bxl-twitter"></i></a>
                 <a href="#" class="facebook"><i class="bx bxl-facebook"></i></a>
@@ -58,10 +64,16 @@
             <ul>
 <!--                <li><a href="#hero" class="nav-link scrollto active"><i class="bx bx-home"></i><span>Home</span></a></li>-->
                 <li><a href="#about" class="nav-link scrollto"><i class="bx bx-user"></i><span>About</span></a></li>
-                <li><a href="#resume" class="nav-link scrollto"><i class="bx bx-file-blank"></i><span>Experience</span></a></li>
-                <li><a href="/board/main" class="nav-link scrollto"><i class="bx bx-book-content"></i><span>Dev_Log</span></a></li>
-<!--                <li><a href="#services" class="nav-link scrollto"><i class="bx bx-server"></i> <span>Services</span></a></li>-->
-<!--                <li><a href="#contact" class="nav-link scrollto"><i class="bx bx-envelope"></i> <span>Contact</span></a></li>-->
+                <li><a href="#experience" class="nav-link scrollto"><i class="bx bx-file-blank"></i><span>Experience</span></a></li>
+                <li class="dropdown">
+                    <a href="#" class="nav-link scrollto dropdown-toggle" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="bx bx-book-content"></i>
+                        <span>Dev_Log</span>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item text-primary" href="/board/all">전체보기</a></li>
+                    </ul>
+                </li>
             </ul>
         </nav><!-- .nav-menu -->
     </div>

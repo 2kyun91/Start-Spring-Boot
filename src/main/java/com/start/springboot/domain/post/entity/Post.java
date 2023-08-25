@@ -3,6 +3,7 @@ package com.start.springboot.domain.post.entity;
 import com.start.springboot.domain.attach.entity.Attach;
 import com.start.springboot.domain.board.entity.Board;
 import com.start.springboot.domain.post.dto.PostDto;
+import com.start.springboot.domain.reply.dto.ReplyDto;
 import com.start.springboot.domain.reply.entity.Reply;
 import lombok.Builder;
 import lombok.Getter;
@@ -16,6 +17,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.List;
 
 /**

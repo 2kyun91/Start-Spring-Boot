@@ -4,9 +4,9 @@ package com.start.springboot.domain.post.repository;
 import com.querydsl.core.Tuple;
 import com.querydsl.core.types.ExpressionUtils;
 import com.querydsl.core.types.Projections;
-import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import com.start.springboot.domain.post.dto.PostAllBoardDto;
 import com.start.springboot.domain.post.dto.PostDto;
 import com.start.springboot.domain.post.entity.Post;
 import lombok.RequiredArgsConstructor;
@@ -24,46 +24,6 @@ import static com.start.springboot.domain.post.entity.QPost.post;
 @RequiredArgsConstructor
 public class PostRepositoryImpl implements PostRepositoryCustom {
     private final JPAQueryFactory jpaQueryFactory;
-
-    @Override
-    public Page<PostDto> getAllPostByBoardMain(Pageable pageable) {
-//        List<PostDto> postDtoList = jpaQueryFactory
-//                .select(
-//                    Projections.fields(
-//                        PostDto.class,
-//                        post.postId,
-//                        post.postTitle,
-//                        post.postContent,
-//                        post.postWriter,
-//                        post.postViewCount,
-//                        post.board, // 관계 있는 엔티티의 칼럼들과 합쳐진 dto 객체를 생성 해야될듯?!
-//                        post.replies,
-//                        post.attaches,
-//                        post.postCreateDate
-//                    )
-//                )
-//                .from(post)
-//                .where(post.postId.isNotNull())
-//                .offset(pageable.getOffset())
-//                .limit(pageable.getPageSize())
-//                .orderBy(post.postCreateDate.desc())
-//                .fetch();
-        List<Post> postList = jpaQueryFactory.selectFrom(post)
-                .offset(pageable.getOffset())
-                .limit(pageable.getPageSize())
-                .orderBy(post.postCreateDate.desc())
-                .fetch();
-
-        List<PostDto> postDtoList = new ArrayList<>();
-        if (!postList.isEmpty()) {
-            postList.forEach(p -> postDtoList.add(p.toDto(p)));
-        }
-
-        JPAQuery<Long> countQuery = jpaQueryFactory
-                .select(post.count())
-                .from(post);
-        return PageableExecutionUtils.getPage(postDtoList, pageable, countQuery::fetchOne);
-    }
 
     @Override
     public long updatePost(Post postObj) {
@@ -164,6 +124,41 @@ public class PostRepositoryImpl implements PostRepositoryCustom {
                 ).from(post)
                 .where(post.postTitle.contains(postTitle))
                 .orderBy(post.postId.desc()).fetch();
+    }
+
+    @Override
+    public Page<PostAllBoardDto> getPostByAllBoard(Pageable pageable) {
+        List<PostAllBoardDto> postAllBoardDtoList = jpaQueryFactory
+                .select(
+                        Projections.fields(
+                                PostAllBoardDto.class,
+                                post.postId,
+                                post.postTitle,
+                                post.postContent,
+                                post.postShowYn,
+                                post.postWriter,
+                                post.postViewCount,
+                                post.postCreateDate,
+                                post.board.boardId,
+                                post.board.boardName,
+                                ExpressionUtils.as(
+                                        post.attaches.size(), "attachesCount"
+                                ),
+                                ExpressionUtils.as(
+                                        post.replies.size(), "repliesCount"
+                                )
+                        )
+                ).from(post)
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .orderBy(post.postCreateDate.desc())
+                .fetch();
+
+        JPAQuery<Long> postListCountQuery = jpaQueryFactory
+                .select(post.count())
+                .from(post);
+
+        return PageableExecutionUtils.getPage(postAllBoardDtoList, pageable, postListCountQuery::fetchOne);
     }
 }
 

@@ -6,6 +6,7 @@ import com.start.springboot.domain.attach.entity.Attach;
 import com.start.springboot.domain.attach.service.AttachService;
 import com.start.springboot.domain.board.BoardRepositoryTests;
 import com.start.springboot.domain.board.dto.BoardDto;
+import com.start.springboot.domain.post.dto.PostAllBoardDto;
 import com.start.springboot.domain.post.dto.PostDto;
 import com.start.springboot.domain.post.entity.Post;
 import com.start.springboot.domain.post.service.PostService;
@@ -76,7 +77,7 @@ public class PostRepositoryTests {
         BoardDto boardDto = boardRepositoryTests.testGetBoard(1L);
 
         PostDto postDto = new PostDto();
-        postDto.setPostTitle("오늘은 8월 넷째주 월요일입니다.");
+        postDto.setPostTitle("오늘은 8월 넷째주 목요일입니다.");
         postDto.setPostContent("독서실에 와서 공부 중입니다.");
         postDto.setPostWriter("자바");
         postDto.setBoard(boardDto.toEntity());
@@ -286,5 +287,16 @@ public class PostRepositoryTests {
         replyDto.setReplyWriter("자바");
         replyDto.setPost(reply.getPost());
         replyService.createReply(replyDto);
+    }
+
+    @Test
+    public void testGetPostByAllBoard() {
+        Pageable pageable = PageRequest.of(0, 5);
+        Page<PostAllBoardDto> boardMainDtos = postService.getPostByAllBoard(pageable);
+        System.out.println(boardMainDtos.getSize());
+        System.out.println(boardMainDtos.getTotalPages());
+        System.out.println(boardMainDtos.getTotalElements());
+        System.out.println(boardMainDtos.getContent());
+        System.out.println("-----------------------------------");
     }
 }
