@@ -4,9 +4,27 @@
         <th:block layout:fragment="script">
             <script th:inline="javascript">
                 $(function(){
+                    $("#listOrder > li > a").on("click", function (e) {
+                        changeListOrder($(this).attr('id'));
+                    })
                 });
-                function changeListOrder(str) {
-                    alert(str);
+
+                function changeListOrder(orderType) {
+                    $.ajax({
+                        type : 'get',
+                        url : '/board/all',
+                        async : true,
+                        dataType : 'html',
+                        data : {
+                            "orderType" : orderType,
+                        },
+                        success : function(result) {
+                            $("#boardAllList").html(result);
+                        },
+                        error : function(request, status, error) {
+                            console.log(error)
+                        }
+                    })
                 }
             </script>
         </th:block>

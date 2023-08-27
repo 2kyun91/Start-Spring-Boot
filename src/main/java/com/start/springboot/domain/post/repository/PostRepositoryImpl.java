@@ -3,7 +3,10 @@ package com.start.springboot.domain.post.repository;
 
 import com.querydsl.core.Tuple;
 import com.querydsl.core.types.ExpressionUtils;
+import com.querydsl.core.types.Order;
+import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.Projections;
+import com.querydsl.core.types.dsl.PathBuilder;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.start.springboot.domain.post.dto.PostAllBoardDto;
@@ -12,11 +15,13 @@ import com.start.springboot.domain.post.entity.Post;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.support.PageableExecutionUtils;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import static com.start.springboot.domain.post.entity.QPost.post;
 
@@ -151,7 +156,7 @@ public class PostRepositoryImpl implements PostRepositoryCustom {
                 ).from(post)
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
-                .orderBy(post.postCreateDate.desc())
+                .orderBy(createOrderSpecifier(pageable.getSort()))
                 .fetch();
 
         JPAQuery<Long> postListCountQuery = jpaQueryFactory
@@ -159,6 +164,18 @@ public class PostRepositoryImpl implements PostRepositoryCustom {
                 .from(post);
 
         return PageableExecutionUtils.getPage(postAllBoardDtoList, pageable, postListCountQuery::fetchOne);
+    }
+
+    private OrderSpecifier[] createOrderSpecifier(Sort sort) {
+        List<OrderSpecifier> orderSpecifiers = new ArrayList<>();
+        sort.stream().forEach(order -> {
+            Order direction = order.isAscending() ? Order.ASC : Order.DESC;
+            String property = order.getProperty();
+//            PathBuilder pathBuilder = new PathBuilder(post.getType(), post.getMetadata());
+            PathBuilder pathBuilder = new PathBuilder(Objects.class, "post");
+            orderSpecifiers.add(new OrderSpecifier(direction, pathBuilder.get(property)));
+        });
+        return orderSpecifiers.toArray(new OrderSpecifier[orderSpecifiers.size()]);
     }
 }
 
