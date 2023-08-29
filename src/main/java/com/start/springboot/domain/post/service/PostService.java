@@ -1,7 +1,7 @@
 package com.start.springboot.domain.post.service;
 
 import com.querydsl.core.Tuple;
-import com.start.springboot.domain.post.dto.PostAllBoardDto;
+import com.start.springboot.domain.post.dto.PostBoardDto;
 import com.start.springboot.domain.post.dto.PostDto;
 import com.start.springboot.domain.post.entity.Post;
 import com.start.springboot.domain.post.repository.PostRepository;
@@ -76,7 +76,7 @@ public class PostService {
         return postRepository.findByPostWithAttachCountOrderByPostIdDesc(postTitle);
     }
 
-    public Page<PostAllBoardDto> getPostByAllBoard(Pageable pageable) {
-        return postRepository.getPostByAllBoard(pageable);
+    public Page<PostBoardDto> getPostList(String search, Pageable pageable) {
+        return postRepository.getPostList(search, pageable);
     }
 }

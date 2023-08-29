@@ -1,19 +1,17 @@
 package com.start.springboot.domain.board.controller;
 
-import com.start.springboot.domain.board.service.BoardService;
-import com.start.springboot.domain.navigation.service.NavBarService;
-import com.start.springboot.domain.post.dto.PostAllBoardDto;
+import com.start.springboot.common.page.PageDto;
+import com.start.springboot.common.page.Pagination;
+import com.start.springboot.domain.post.dto.PostBoardDto;
 import com.start.springboot.domain.post.service.PostService;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
@@ -22,31 +20,36 @@ import org.springframework.web.servlet.ModelAndView;
 @RequestMapping("/board")
 @RequiredArgsConstructor
 public class BoardController {
-    private final NavBarService navBarService;
-    private final BoardService boardService;
     private final PostService postService;
 
-    @GetMapping("/all")
+    @RequestMapping("/{boardType}/list")
     @ResponseBody
-    public ModelAndView getPostByAllBoard(@Param("orderType") String orderType, Model model) {
+    public ModelAndView getPostList(
+            @PathVariable("boardType") String boardType,
+            @Param("search") String search, @Param("orderType") String orderType,
+            PageDto pageDto) {
         ModelAndView mv = new ModelAndView();
+
         if (!StringUtils.isEmpty(orderType)) {
-            mv.setViewName("/board/all_list");
+            mv.setViewName("/board/" + boardType + "_list");
         } else {
             orderType = "postCreateDate";
-            mv.setViewName("/board/all");
+            mv.setViewName("/board/" + boardType);
         }
 
-        Pageable pageable = PageRequest.of(0, 5, Sort.by(Sort.Order.desc(orderType)));
-        Page<PostAllBoardDto> postAllBoardDtos = postService.getPostByAllBoard(pageable);
-        if (!postAllBoardDtos.isEmpty()) {
-            mv.addObject("postList", postAllBoardDtos.getContent());
-            mv.addObject("totalElements", postAllBoardDtos.getTotalElements());
-            mv.addObject("totalPages", postAllBoardDtos.getTotalPages());
-            mv.addObject("pageSize", postAllBoardDtos.getSize());
+//        Pageable pageable = PageRequest.of(0, 5, Sort.by(Sort.Order.desc(orderType)));
+        Pageable pageable = pageDto.makePageable(Sort.Direction.DESC, orderType);
+        Page<PostBoardDto> postBoardDtos = postService.getPostList(search, pageable);
+        Pagination pagination = new Pagination(postBoardDtos);
+
+        if (!postBoardDtos.isEmpty()) {
+            mv.addObject("pagination", pagination);
+            mv.addObject("search", search);
+//            mv.addObject("totalElements", postBoardDtos.getTotalElements());
+//            mv.addObject("totalPages", postBoardDtos.getTotalPages());
+//            mv.addObject("pageSize", postBoardDtos.getSize());
         }
 
         return mv;
     }
 }
-

@@ -1,28 +1,60 @@
 <!doctype html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
     <div th:fragment="footer">
+        <br>
+        <nav aria-label="Page navigation">
+            <ul id="movePage" class="pagination justify-content-center">
+                <li class="page-item" th:if="${pagination.prevPage}">
+                    <a href="javascript:void(0);" th:value="${pagination.prevPage.pageNumber} + 1" th:onclick="movePage(this.getAttribute('value'))" class="page-link">< 이전</a>
+                </li>
+                <li class="page-item" th:classappend="${pagination.currentPageNumber - 1 eq p.pageNumber } ? active : ''" th:each="p:${pagination.pageList}">
+                    <a href="javascript:void(0);" th:value="${p.pageNumber} + 1" th:onclick="movePage(this.getAttribute('value'))" class="page-link">[[${p.pageNumber} + 1]]</a>
+                </li>
+                <li class="page-item" th:if="${pagination.nextPage}">
+                    <a  href="javascript:void(0);" th:value="${pagination.nextPage.pageNumber} + 1" th:onclick="movePage(this.getAttribute('value'))" class="page-link">다음 ></a>
+                </li>
+            </ul>
+        </nav>
+
         <th:block layout:fragment="script">
             <script th:inline="javascript">
                 $(function(){
-                    $("#listOrder > li > a").on("click", function (e) {
-                        changeListOrder($(this).attr('id'));
-                    })
+                    $("#listOrder > li > a").on("click", function () {
+                        let search = $("#search").val();
+                        let orderType = $(this).attr('id');
+                        getList(search, orderType);
+                        $("#listOrder > li > a").removeClass("active");
+                        $(this).addClass("active");
+                    });
                 });
 
-                function changeListOrder(orderType) {
+                function movePage(pageNumber) {
+                    let search = $("#search").val();
+                    let orderType = $("#listOrder > li > a.active").attr("id");
+                    let page = pageNumber;
+                    getList(search, orderType, page);
+                    $("#movePage > li").removeClass("active");
+                    $("#movePage > li > a[value=" + pageNumber + "]").parent().addClass("active");
+                }
+
+                function getList(search, orderType, page) {
+                    let url = $(location).attr('pathname');
                     $.ajax({
-                        type : 'get',
-                        url : '/board/all',
+                        type : 'post',
+                        url : url,
                         async : true,
                         dataType : 'html',
                         data : {
+                            "search" : search,
                             "orderType" : orderType,
+                            "page" : page
                         },
                         success : function(result) {
                             $("#boardAllList").html(result);
                         },
                         error : function(request, status, error) {
                             console.log(error)
+                            return false;
                         }
                     })
                 }

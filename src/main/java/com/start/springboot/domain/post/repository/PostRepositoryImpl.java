@@ -9,10 +9,11 @@ import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.PathBuilder;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import com.start.springboot.domain.post.dto.PostAllBoardDto;
+import com.start.springboot.domain.post.dto.PostBoardDto;
 import com.start.springboot.domain.post.dto.PostDto;
 import com.start.springboot.domain.post.entity.Post;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -24,6 +25,7 @@ import java.util.List;
 import java.util.Objects;
 
 import static com.start.springboot.domain.post.entity.QPost.post;
+import static com.start.springboot.domain.board.entity.QBoard.board;
 
 @Repository
 @RequiredArgsConstructor
@@ -132,11 +134,11 @@ public class PostRepositoryImpl implements PostRepositoryCustom {
     }
 
     @Override
-    public Page<PostAllBoardDto> getPostByAllBoard(Pageable pageable) {
-        List<PostAllBoardDto> postAllBoardDtoList = jpaQueryFactory
+    public Page<PostBoardDto> getPostList(String search, Pageable pageable) {
+        JPAQuery<PostBoardDto> postListQuery = jpaQueryFactory
                 .select(
                         Projections.fields(
-                                PostAllBoardDto.class,
+                                PostBoardDto.class,
                                 post.postId,
                                 post.postTitle,
                                 post.postContent,
@@ -154,16 +156,22 @@ public class PostRepositoryImpl implements PostRepositoryCustom {
                                 )
                         )
                 ).from(post)
+                .innerJoin(post.board, board)
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
-                .orderBy(createOrderSpecifier(pageable.getSort()))
-                .fetch();
+                .orderBy(createOrderSpecifier(pageable.getSort()));
+
+        if (!StringUtils.isEmpty(search)) {
+            postListQuery.where(post.postTitle.contains(search).or(post.postContent.contains(search)));
+        }
+
+        List<PostBoardDto> postList = postListQuery.fetch();
 
         JPAQuery<Long> postListCountQuery = jpaQueryFactory
                 .select(post.count())
                 .from(post);
 
-        return PageableExecutionUtils.getPage(postAllBoardDtoList, pageable, postListCountQuery::fetchOne);
+        return PageableExecutionUtils.getPage(postList, pageable, postListCountQuery::fetchOne);
     }
 
     private OrderSpecifier[] createOrderSpecifier(Sort sort) {

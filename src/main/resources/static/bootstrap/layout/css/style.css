@@ -84,7 +84,7 @@ h6 {
 }
 
 #header .profile img {
-  margin: 15px auto;
+  margin: 45px auto;
   display: block;
   width: 200px;
   height: 200px;
@@ -1078,7 +1078,7 @@ section {
 #footer {
   padding: 15px;
   color: #f4f6fd;
-  font-size: 14px;
+  font-size: 30px;
   position: fixed;
   left: 0;
   bottom: 0;

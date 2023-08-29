@@ -6,7 +6,7 @@ import com.start.springboot.domain.attach.entity.Attach;
 import com.start.springboot.domain.attach.service.AttachService;
 import com.start.springboot.domain.board.BoardRepositoryTests;
 import com.start.springboot.domain.board.dto.BoardDto;
-import com.start.springboot.domain.post.dto.PostAllBoardDto;
+import com.start.springboot.domain.post.dto.PostBoardDto;
 import com.start.springboot.domain.post.dto.PostDto;
 import com.start.springboot.domain.post.entity.Post;
 import com.start.springboot.domain.post.service.PostService;
@@ -292,7 +292,7 @@ public class PostRepositoryTests {
     @Test
     public void testGetPostByAllBoard() {
         Pageable pageable = PageRequest.of(0, 5);
-        Page<PostAllBoardDto> boardMainDtos = postService.getPostByAllBoard(pageable);
+        Page<PostBoardDto> boardMainDtos = postService.getPostList("오늘은", pageable);
         System.out.println(boardMainDtos.getSize());
         System.out.println(boardMainDtos.getTotalPages());
         System.out.println(boardMainDtos.getTotalElements());
