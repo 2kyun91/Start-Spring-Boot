@@ -1,15 +1,6 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-    <div th:fragment="all_list" th:if="${pagination}" th:with="postList=${pagination.result.content}">
-        <p>
-            총
-            <em class="text-primary" style="font-style: normal;" th:text="${#numbers.formatInteger(totalElements, 3, 'COMMA')}"></em>
-            개의 게시글이 있습니다.
-            <button class="btn btn-primary" type="button">Button</button>
-        </p>
-<!--        <div class="d-grid gap-2 d-md-flex justify-content-md-end">-->
-<!--            <button class="btn btn-primary" type="button">Button</button>-->
-<!--        </div>-->
-
+    <div th:fragment="list" th:if="${pagination}" th:with="postList=${pagination.result.content}">
+        <div th:replace="~{post/list_header::list_header}"/>
         <ul th:each="post, iter : ${postList}" th:if="${post.postShowYn == 'Y'}" class="list-group" style="margin-bottom: 10px;">
             <li th:text="'게시글 Id : ' + ${post.postId}" class="list-group-item">게시글 Id</li>
             <li th:text="'게시글 제목 : ' + ${post.postTitle}" class="list-group-item">게시글 제목</li>
@@ -23,10 +14,12 @@
             <li th:text="'게시글 - 댓글 갯수 : ' + ${post.attachesCount}" class="list-group-item">게시글 댓글 갯수</li>
             <li th:text="'게시글 - 첨부파일 갯수 : ' + ${post.repliesCount}" class="list-group-item">게시글 첨부파일 갯수</li>
         </ul>
-        <div th:replace="~{board/footer::footer}"></div>
+        <div th:replace="~{post/list_footer::list_footer}"/>
     </div>
+
     <div th:fragment="all_list" th:unless="${pagination}">
+        <div th:replace="~{post/list_header::list_header}"/>
         <p style="text-align: center">해당하는 게시글이 없습니다.</p>
-        <div th:replace="~{board/footer::footer}"></div>
+        <div th:replace="~{post/list_footer::list_footer}"/>
     </div>
 </html>

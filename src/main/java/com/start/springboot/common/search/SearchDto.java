@@ -15,6 +15,8 @@ public class SearchDto {
 
     private String searchWord;
 
+    private String orderType;
+
     public BooleanBuilder makeBooleanBuilder(QPost post) {
         BooleanBuilder booleanBuilder = new BooleanBuilder();
 

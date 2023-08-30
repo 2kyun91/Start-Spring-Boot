@@ -1,11 +1,10 @@
 <!doctype html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{/layout/default_layout}">
+
 <div layout:fragment="content">
-    <h1>메인 페이지 꾸미기</h1>
+    <div id="postList" th:if="${#httpServletRequest.requestURI.contains('/list')}">
+        <div th:replace="~{post/list::list}"/>
+    </div>
 </div>
 
-<th:block layout:fragment="script">
-    <script th:inline="javascript">
-    </script>
-</th:block>
 </html>

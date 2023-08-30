@@ -1,6 +1,6 @@
 <!doctype html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-    <div th:fragment="footer">
+    <div th:fragment="list_footer">
         <br>
         <nav th:if="${pagination}" aria-label="Page navigation">
             <ul id="movePage" class="pagination justify-content-center">
@@ -45,7 +45,7 @@
                 function getList(searchWord, searchType, orderType, page) {
                     let url = $(location).attr('pathname');
                     $.ajax({
-                        type : 'post',
+                        type : 'get',
                         url : url,
                         async : true,
                         dataType : 'html',
@@ -56,7 +56,7 @@
                             "page" : page
                         },
                         success : function(result) {
-                            $("#boardAllList").html(result);
+                            $("#postList").html(result);
                         },
                         error : function(request, status, error) {
                             console.log(error)
