@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Import;
+import org.springframework.test.annotation.Commit;
 import org.springframework.util.ObjectUtils;
 
 import javax.transaction.Transactional;
@@ -60,11 +61,15 @@ public class BoardRepositoryTests {
     * */
     @Test
     @Transactional
+    @Commit
     public void testGetBoard2() {
         BoardDto boardDto = new BoardDto();
-        Board board = boardService.getBoard(1L);
+        Board board = boardService.getBoard(2L);
         if (!ObjectUtils.isEmpty(board)) {
             boardDto = board.toDto(board);
+            System.out.println(boardDto);
+        } else {
+            boardDto = testCreateBoard();
             System.out.println(boardDto);
         }
     }
@@ -77,7 +82,7 @@ public class BoardRepositoryTests {
     @Test
     public BoardDto testCreateBoard() {
         NavBarDto navBarDto = new NavBarDto();
-        navBarDto.setNavBarGnb("테스트");
+        navBarDto.setNavBarGnb("Dev_Log");
         navBarDto = navBarRepositoryTests.testGetNavBar(navBarDto);
 
         BoardDto boardDto = new BoardDto();

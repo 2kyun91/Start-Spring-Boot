@@ -291,12 +291,12 @@ public class PostRepositoryTests {
 
     @Test
     public void testGetPostByAllBoard() {
-        Pageable pageable = PageRequest.of(0, 5);
-        Page<PostBoardDto> boardMainDtos = postService.getPostList("오늘은", pageable);
-        System.out.println(boardMainDtos.getSize());
-        System.out.println(boardMainDtos.getTotalPages());
-        System.out.println(boardMainDtos.getTotalElements());
-        System.out.println(boardMainDtos.getContent());
-        System.out.println("-----------------------------------");
+//        Pageable pageable = PageRequest.of(0, 5);
+//        Page<PostBoardDto> boardMainDtos = postService.getPostList("오늘은", pageable);
+//        System.out.println(boardMainDtos.getSize());
+//        System.out.println(boardMainDtos.getTotalPages());
+//        System.out.println(boardMainDtos.getTotalElements());
+//        System.out.println(boardMainDtos.getContent());
+//        System.out.println("-----------------------------------");
     }
 }

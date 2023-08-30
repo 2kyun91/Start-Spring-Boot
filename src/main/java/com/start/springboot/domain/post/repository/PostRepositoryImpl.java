@@ -1,6 +1,7 @@
 package com.start.springboot.domain.post.repository;
 
 
+import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.Tuple;
 import com.querydsl.core.types.ExpressionUtils;
 import com.querydsl.core.types.Order;
@@ -9,10 +10,12 @@ import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.PathBuilder;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import com.start.springboot.common.search.SearchDto;
 import com.start.springboot.domain.post.dto.PostBoardDto;
 import com.start.springboot.domain.post.dto.PostDto;
 import com.start.springboot.domain.post.entity.Post;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -134,7 +137,7 @@ public class PostRepositoryImpl implements PostRepositoryCustom {
     }
 
     @Override
-    public Page<PostBoardDto> getPostList(String search, Pageable pageable) {
+    public Page<PostBoardDto> getPostList(SearchDto searchDto, Pageable pageable) {
         JPAQuery<PostBoardDto> postListQuery = jpaQueryFactory
                 .select(
                         Projections.fields(
@@ -161,15 +164,17 @@ public class PostRepositoryImpl implements PostRepositoryCustom {
                 .limit(pageable.getPageSize())
                 .orderBy(createOrderSpecifier(pageable.getSort()));
 
-        if (!StringUtils.isEmpty(search)) {
-            postListQuery.where(post.postTitle.contains(search).or(post.postContent.contains(search)));
-        }
-
-        List<PostBoardDto> postList = postListQuery.fetch();
-
         JPAQuery<Long> postListCountQuery = jpaQueryFactory
                 .select(post.count())
                 .from(post);
+
+        if (!ObjectUtils.isEmpty(searchDto)) {
+            BooleanBuilder booleanBuilder = searchDto.makeBooleanBuilder(post);
+            postListQuery.where(booleanBuilder);
+            postListCountQuery.where(booleanBuilder);
+        }
+
+        List<PostBoardDto> postList = postListQuery.fetch();
 
         return PageableExecutionUtils.getPage(postList, pageable, postListCountQuery::fetchOne);
     }

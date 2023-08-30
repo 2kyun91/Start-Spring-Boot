@@ -1,24 +1,32 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-    <div th:fragment="all_list" th:with="postList=${pagination.result.content}">
-        <div th:if="${postList}" >
-            <ul th:each="post, iter : ${postList}" th:if="${post.postShowYn == 'Y'}" class="list-group" style="margin-bottom: 10px;">
-                <li th:text="'게시글 Id : ' + ${post.postId}" class="list-group-item">게시글 Id</li>
-                <li th:text="'게시글 제목 : ' + ${post.postTitle}" class="list-group-item">게시글 제목</li>
-                <li th:text="'게시글 내용 : ' + ${post.postContent}" class="list-group-item">게시글 내용</li>
-                <!--            <li th:text="'게시글 노출여부 : ' + ${post.postShowYn}" class="list-group-item">게시글 내용</li>-->
-                <li th:text="'게시글 작성자 : ' + ${post.postWriter}" class="list-group-item">게시글 작성자</li>
-                <li th:text="'게시글 조회수 : ' + ${post.postViewCount}" class="list-group-item">게시글 조회수</li>
-                <li th:text="'게시글 작성일 : ' + ${#dates.format(post.postCreateDate, 'yyyy-MM-dd')}" class="list-group-item">게시글 작성일</li>
-                <!--            <li th:text="'게시글 - 게시판 Id : ' + ${post.boardId}" class="list-group-item">게시글 - 게시판 Id</li>-->
-                <li th:text="'게시글 - 게시판 이름 : ' + ${post.boardName}" class="list-group-item">게시글 - 게시판 이름</li>
-                <li th:text="'게시글 - 댓글 갯수 : ' + ${post.attachesCount}" class="list-group-item">게시글 댓글 갯수</li>
-                <li th:text="'게시글 - 첨부파일 갯수 : ' + ${post.repliesCount}" class="list-group-item">게시글 첨부파일 갯수</li>
-            </ul>
-        </div>
-        <div th:unless="${postList}">
-            <ul class="list-group" style="margin-bottom: 10px;">
-                <li class="list-group-item">해당하는 게시글이 없습니다.</li>
-            </ul>
-        </div>
+    <div th:fragment="all_list" th:if="${pagination}" th:with="postList=${pagination.result.content}">
+        <p>
+            총
+            <em class="text-primary" style="font-style: normal;" th:text="${#numbers.formatInteger(totalElements, 3, 'COMMA')}"></em>
+            개의 게시글이 있습니다.
+            <button class="btn btn-primary" type="button">Button</button>
+        </p>
+<!--        <div class="d-grid gap-2 d-md-flex justify-content-md-end">-->
+<!--            <button class="btn btn-primary" type="button">Button</button>-->
+<!--        </div>-->
+
+        <ul th:each="post, iter : ${postList}" th:if="${post.postShowYn == 'Y'}" class="list-group" style="margin-bottom: 10px;">
+            <li th:text="'게시글 Id : ' + ${post.postId}" class="list-group-item">게시글 Id</li>
+            <li th:text="'게시글 제목 : ' + ${post.postTitle}" class="list-group-item">게시글 제목</li>
+            <li th:text="'게시글 내용 : ' + ${post.postContent}" class="list-group-item">게시글 내용</li>
+            <!--            <li th:text="'게시글 노출여부 : ' + ${post.postShowYn}" class="list-group-item">게시글 내용</li>-->
+            <li th:text="'게시글 작성자 : ' + ${post.postWriter}" class="list-group-item">게시글 작성자</li>
+            <li th:text="'게시글 조회수 : ' + ${post.postViewCount}" class="list-group-item">게시글 조회수</li>
+            <li th:text="'게시글 작성일 : ' + ${#dates.format(post.postCreateDate, 'yyyy-MM-dd')}" class="list-group-item">게시글 작성일</li>
+            <!--            <li th:text="'게시글 - 게시판 Id : ' + ${post.boardId}" class="list-group-item">게시글 - 게시판 Id</li>-->
+            <li th:text="'게시글 - 게시판 이름 : ' + ${post.boardName}" class="list-group-item">게시글 - 게시판 이름</li>
+            <li th:text="'게시글 - 댓글 갯수 : ' + ${post.attachesCount}" class="list-group-item">게시글 댓글 갯수</li>
+            <li th:text="'게시글 - 첨부파일 갯수 : ' + ${post.repliesCount}" class="list-group-item">게시글 첨부파일 갯수</li>
+        </ul>
+        <div th:replace="~{board/footer::footer}"></div>
+    </div>
+    <div th:fragment="all_list" th:unless="${pagination}">
+        <p style="text-align: center">해당하는 게시글이 없습니다.</p>
+        <div th:replace="~{board/footer::footer}"></div>
     </div>
 </html>

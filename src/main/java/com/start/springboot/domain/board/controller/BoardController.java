@@ -2,6 +2,7 @@ package com.start.springboot.domain.board.controller;
 
 import com.start.springboot.common.page.PageDto;
 import com.start.springboot.common.page.Pagination;
+import com.start.springboot.common.search.SearchDto;
 import com.start.springboot.domain.post.dto.PostBoardDto;
 import com.start.springboot.domain.post.service.PostService;
 import lombok.RequiredArgsConstructor;
@@ -11,9 +12,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 @Controller
@@ -26,8 +25,8 @@ public class BoardController {
     @ResponseBody
     public ModelAndView getPostList(
             @PathVariable("boardType") String boardType,
-            @Param("search") String search, @Param("orderType") String orderType,
-            PageDto pageDto) {
+            @ModelAttribute("search") SearchDto searchDto, PageDto pageDto,
+            @Param("orderType") String orderType) {
         ModelAndView mv = new ModelAndView();
 
         if (!StringUtils.isEmpty(orderType)) {
@@ -37,14 +36,13 @@ public class BoardController {
             mv.setViewName("/board/" + boardType);
         }
 
-//        Pageable pageable = PageRequest.of(0, 5, Sort.by(Sort.Order.desc(orderType)));
         Pageable pageable = pageDto.makePageable(Sort.Direction.DESC, orderType);
-        Page<PostBoardDto> postBoardDtos = postService.getPostList(search, pageable);
+        Page<PostBoardDto> postBoardDtos = postService.getPostList(searchDto, pageable);
         Pagination pagination = new Pagination(postBoardDtos);
 
         if (!postBoardDtos.isEmpty()) {
             mv.addObject("pagination", pagination);
-            mv.addObject("search", search);
+            mv.addObject("totalElements", pagination.getResult().getTotalElements());
 //            mv.addObject("totalElements", postBoardDtos.getTotalElements());
 //            mv.addObject("totalPages", postBoardDtos.getTotalPages());
 //            mv.addObject("pageSize", postBoardDtos.getSize());
