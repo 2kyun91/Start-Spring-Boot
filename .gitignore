@@ -170,6 +170,7 @@ gradle-app.setting
 *.yaml
 *.yml
 application.properties
+application.yaml
 generated
 
 # End of https://www.toptal.com/developers/gitignore/api/gradle,java,intellij
