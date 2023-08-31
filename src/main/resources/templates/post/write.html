@@ -28,12 +28,12 @@
                     <input id="attaches" class="form-control form-control-lg" type="file" multiple>
                 </div>
 
-                <!-- 에디터 적용해보기 -->
                 <div class="mb-3 ">
-                    <label for="postContent" class="form-label">내용</label>
-                    <textarea id="postContent" class="form-control form-control-lg" style="height: 500px;" placeholder="내용을 입력해주세요."></textarea>
+                    <label for="summernote" class="form-label">내용</label>
+                    <div id="summernote"></div>
                 </div>
             </form>
         </section>
+        <div th:replace="~{post/write_footer::write_footer}"/>
     </div>
 </html>

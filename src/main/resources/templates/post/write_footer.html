@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<div th:fragment="write_footer">
+    <th:block layout:fragment="script">
+        <script th:inline="javascript">
+            $(function () {
+                $('#summernote').summernote({
+                    placeholder: '내용을 입력해주세요.',
+                    tabsize: 2,
+                    height: 600,
+                    lang: 'ko-KR', // default: 'en-US'
+                    toolbar: [
+                        ['style', ['style']],
+                        ['font', ['bold', 'underline', 'clear']],
+                        ['color', ['color']],
+                        ['para', ['ul', 'ol', 'paragraph']],
+                        ['table', ['table']],
+                        ['insert', ['link', 'picture']],
+                        ['view', ['codeview']]
+                    ]
+                });
+            });
+        </script>
+    </th:block>
+</div>
+</html>
