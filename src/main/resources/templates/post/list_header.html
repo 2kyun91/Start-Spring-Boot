@@ -27,9 +27,10 @@
         <br>
         <p>
             총
-            <em class="text-primary" style="font-style: normal;" th:text="${#numbers.formatInteger(totalElements, 3, 'COMMA')}"></em>
+            <em class="text-primary" style="font-style: normal; font-size: x-large;" th:if="${#strings.length(totalElements) >= 3}" th:text="${#numbers.formatInteger(totalElements, 3, 'COMMA')}"></em>
+            <em class="text-primary" style="font-style: normal; font-size: x-large;" th:unless="${#strings.length(totalElements) >= 3}" th:text="${totalElements}"></em>
             개의 게시글이 있습니다.
-            <button class="btn btn-primary" style="float: right;" type="button">글쓰기</button>
+            <a th:href="@{/board/{boardId}/write(boardId=${boardId})}" class="btn btn-primary" style="float: right;" type="button">글쓰기</a>
         </p>
     </div>
 </html>

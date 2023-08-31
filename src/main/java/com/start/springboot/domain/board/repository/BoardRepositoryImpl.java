@@ -1,9 +1,14 @@
 package com.start.springboot.domain.board.repository;
 
+import com.querydsl.core.types.Projections;
+import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.start.springboot.domain.board.entity.Board;
+import com.start.springboot.domain.post.dto.PostBoardDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
+
+import java.util.List;
 
 import static com.start.springboot.domain.board.entity.QBoard.board;
 
@@ -20,5 +25,24 @@ public class BoardRepositoryImpl implements BoardRepositoryCustom{
                 .set(board.boardUpdateDate, boardObj.getBoardUpdateDate())
                 .where(board.boardId.eq(boardObj.getBoardId()))
                 .execute();
+    }
+
+    @Override
+    public String getBoardName(Long boardId) {
+        String boardName = jpaQueryFactory.select(board.boardName).from(board).where(board.boardId.eq(boardId)).fetchOne();
+        return boardName;
+    }
+
+    @Override
+    public List<PostBoardDto> getAllBoard() {
+        List<PostBoardDto> boardList =  jpaQueryFactory
+                .select(
+                        Projections.fields(
+                                PostBoardDto.class,
+                                board.boardId,
+                                board.boardName
+                        )
+                ).from(board).where(board.boardUseYn.eq("Y")).fetch();
+        return boardList;
     }
 }

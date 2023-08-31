@@ -1,13 +1,16 @@
 package com.start.springboot.domain.post.dto;
 
+import com.start.springboot.domain.attach.entity.Attach;
+import com.start.springboot.domain.reply.entity.Reply;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
 import java.sql.Timestamp;
+import java.util.List;
 
 /**
- * 전체보기 게시판 Dto
+ * 게시판 - 게시글 Dto
  */
 @Getter
 @Setter
@@ -31,7 +34,11 @@ public class PostBoardDto {
 
     private String boardName;
 
+    private List<Attach> attaches;
+
     private int attachesCount;
+
+    private List<Reply> replies;
 
     private int repliesCount;
 }

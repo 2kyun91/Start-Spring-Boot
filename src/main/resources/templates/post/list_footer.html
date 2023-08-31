@@ -1,70 +1,74 @@
 <!doctype html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-    <div th:fragment="list_footer">
-        <br>
-        <nav th:if="${pagination}" aria-label="Page navigation">
-            <ul id="movePage" class="pagination justify-content-center">
-                <li class="page-item" th:if="${pagination.prevPage}">
-                    <a href="javascript:void(0);" th:value="${pagination.prevPage.pageNumber} + 1" th:onclick="movePage(this.getAttribute('value'))" class="page-link">< 이전</a>
-                </li>
-                <li class="page-item" th:classappend="${pagination.currentPageNumber - 1 eq p.pageNumber } ? active : ''" th:each="p:${pagination.pageList}">
-                    <a href="javascript:void(0);" th:value="${p.pageNumber} + 1" th:onclick="movePage(this.getAttribute('value'))" class="page-link">[[${p.pageNumber} + 1]]</a>
-                </li>
-                <li class="page-item" th:if="${pagination.nextPage}">
-                    <a  href="javascript:void(0);" th:value="${pagination.nextPage.pageNumber} + 1" th:onclick="movePage(this.getAttribute('value'))" class="page-link">다음 ></a>
-                </li>
-            </ul>
-        </nav>
-        <nav th:unless="${pagination}" aria-label="Page navigation">
-            <ul class="pagination justify-content-center">
-                <li class="page-item active"><a href="javascript:void(0);" class="page-link">1</a></li>
-            </ul>
-        </nav>
+<div th:fragment="list_footer">
+    <br>
+    <nav th:if="${pagination.totalPageNumber > 1}" aria-label="Page navigation">
+        <ul id="movePage" class="pagination justify-content-center">
+            <li class="page-item" th:if="${pagination.prevPage}">
+                <a href="javascript:void(0);" th:value="${pagination.prevPage.pageNumber} + 1"
+                   th:onclick="movePage(this.getAttribute('value'))" class="page-link">< 이전</a>
+            </li>
+            <li class="page-item" th:classappend="${pagination.currentPageNumber - 1 eq p.pageNumber } ? active : ''"
+                th:each="p:${pagination.pageList}">
+                <a href="javascript:void(0);" th:value="${p.pageNumber} + 1"
+                   th:onclick="movePage(this.getAttribute('value'))" class="page-link">[[${p.pageNumber} + 1]]</a>
+            </li>
+            <li class="page-item" th:if="${pagination.nextPage}">
+                <a href="javascript:void(0);" th:value="${pagination.nextPage.pageNumber} + 1"
+                   th:onclick="movePage(this.getAttribute('value'))" class="page-link">다음 ></a>
+            </li>
+        </ul>
+    </nav>
+    <nav th:unless="${pagination.totalPageNumber > 1}" aria-label="Page navigation">
+        <ul class="pagination justify-content-center">
+            <li class="page-item active"><a href="javascript:void(0);" class="page-link">1</a></li>
+        </ul>
+    </nav>
 
-        <th:block layout:fragment="script">
-            <script th:inline="javascript">
-                $(function(){
-                    $("#orderType").change(function () {
-                        let searchWord = $("#searchWord").val();
-                        let searchType = $('#searchType option:selected').val();
-                        let orderType = $('#orderType option:selected').val();
-                        getList(searchWord, searchType, orderType);
-                    });
-                });
-
-                function movePage(pageNumber) {
+    <th:block layout:fragment="script">
+        <script th:inline="javascript">
+            $(function () {
+                $("#orderType").change(function () {
                     let searchWord = $("#searchWord").val();
                     let searchType = $('#searchType option:selected').val();
                     let orderType = $('#orderType option:selected').val();
-                    let page = pageNumber;
-                    getList(searchWord, searchType, orderType, page);
-                    $("#movePage > li").removeClass("active");
-                    $("#movePage > li > a[value=" + pageNumber + "]").parent().addClass("active");
-                }
+                    getList(searchWord, searchType, orderType);
+                });
+            });
 
-                function getList(searchWord, searchType, orderType, page) {
-                    let url = $(location).attr('pathname');
-                    $.ajax({
-                        type : 'get',
-                        url : url,
-                        async : true,
-                        dataType : 'html',
-                        data : {
-                            "searchWord" : searchWord,
-                            "searchType" : searchType,
-                            "orderType" : orderType,
-                            "page" : page
-                        },
-                        success : function(result) {
-                            $("#postList").html(result);
-                        },
-                        error : function(request, status, error) {
-                            console.log(error)
-                            return false;
-                        }
-                    })
-                }
-            </script>
-        </th:block>
-    </div>
+            function movePage(pageNumber) {
+                let searchWord = $("#searchWord").val();
+                let searchType = $('#searchType option:selected').val();
+                let orderType = $('#orderType option:selected').val();
+                let page = pageNumber;
+                getList(searchWord, searchType, orderType, page);
+                $("#movePage > li").removeClass("active");
+                $("#movePage > li > a[value=" + pageNumber + "]").parent().addClass("active");
+            }
+
+            function getList(searchWord, searchType, orderType, page) {
+                let url = $(location).attr('pathname');
+                $.ajax({
+                    type: 'get',
+                    url: url,
+                    async: true,
+                    dataType: 'html',
+                    data: {
+                        "searchWord": searchWord,
+                        "searchType": searchType,
+                        "orderType": orderType,
+                        "page": page
+                    },
+                    success: function (result) {
+                        $("#content").html(result);
+                    },
+                    error: function (request, status, error) {
+                        console.log(error)
+                        return false;
+                    }
+                })
+            }
+        </script>
+    </th:block>
+</div>
 </html>

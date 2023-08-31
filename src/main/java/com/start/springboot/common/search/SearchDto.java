@@ -17,6 +17,8 @@ public class SearchDto {
 
     private String orderType;
 
+    private Long boardId;
+
     public BooleanBuilder makeBooleanBuilder(QPost post) {
         BooleanBuilder booleanBuilder = new BooleanBuilder();
 
@@ -38,6 +40,11 @@ public class SearchDto {
             default:
                 break;
         }
+
+        if (boardId != 0) { // 0 : 전체보기
+            booleanBuilder.and(post.board.boardId.eq(boardId));
+        }
+
         return  booleanBuilder;
     }
 }
