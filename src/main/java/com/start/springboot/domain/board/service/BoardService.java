@@ -17,7 +17,7 @@ public class BoardService {
     private final BoardRepository boardRepository;
 
     public Board getBoard(Long boardId) {
-        Board board = boardRepository.findById(boardId).orElseGet(Board::new);
+        Board board = boardRepository.findById(boardId).orElseGet(() -> null);
         return board;
     }
 
@@ -30,7 +30,7 @@ public class BoardService {
     }
 
     public BoardDto getBoardReturnDto(Long boardId) {
-        Board board = boardRepository.findById(boardId).orElseGet(Board::new);
+        Board board = boardRepository.findById(boardId).orElseGet(() -> null);
         BoardDto boardDto = board.toDto(board);
         return boardDto;
     }

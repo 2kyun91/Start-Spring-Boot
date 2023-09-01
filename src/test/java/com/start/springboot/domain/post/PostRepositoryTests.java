@@ -74,10 +74,9 @@ public class PostRepositoryTests {
 
     @Test
     public void testCreatePost() {
-        BoardDto boardDto = boardRepositoryTests.testGetBoard(1L);
-
+        BoardDto boardDto = boardRepositoryTests.testGetBoard(2L);
         PostDto postDto = new PostDto();
-        postDto.setPostTitle("오늘은 8월 넷째주 목요일입니다.");
+        postDto.setPostTitle("오늘은 9월의 첫날인 금요일입니다.");
         postDto.setPostContent("독서실에 와서 공부 중입니다.");
         postDto.setPostWriter("자바");
         postDto.setBoard(boardDto.toEntity());

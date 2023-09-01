@@ -3,7 +3,7 @@ package com.start.springboot.domain.board.controller;
 import com.start.springboot.common.page.PageDto;
 import com.start.springboot.common.page.Pagination;
 import com.start.springboot.common.search.SearchDto;
-import com.start.springboot.domain.board.entity.Board;
+import com.start.springboot.domain.board.dto.BoardDto;
 import com.start.springboot.domain.board.service.BoardService;
 import com.start.springboot.domain.post.dto.PostBoardDto;
 import com.start.springboot.domain.post.dto.PostDto;
@@ -17,7 +17,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Controller
 @RequestMapping("/board")
@@ -39,12 +41,15 @@ public class BoardController {
             mv.setViewName("/board/main");
         }
 
+        String boardName = boardService.getBoardName(boardId);
+
         Pageable pageable = pageDto.makePageable(Sort.Direction.DESC, searchDto.getOrderType());
         Page<PostBoardDto> postBoardDtos = postService.getPostList(searchDto, pageable);
         Pagination pagination = new Pagination(postBoardDtos);
 
         mv.addObject("pagination", pagination);
         mv.addObject("boardId", boardId);
+        mv.addObject("boardName", boardName);
         mv.addObject("totalElements", pagination.getResult().getTotalElements());
         return mv;
     }
@@ -65,11 +70,40 @@ public class BoardController {
         return mv;
     }
 
-    @PostMapping("/{boardType}/write")
-    public String saveWriteForm(
-            @PathVariable("boardType") String boardType,
-            @ModelAttribute("postDto")PostDto postDto) {
-        Long postId = postDto.getPostId();
-        return "redirect:/board/" + boardType + "/view/" + postId;
+    @PostMapping("/{boardId}/write")
+    @ResponseBody
+    public Map<String, Object> saveWriteForm(
+            @PathVariable("boardId") Long boardId,
+            PostBoardDto postBoardDto) {
+        Map<String, Object> returnMap = new HashMap<>();
+        try {
+            String boardName = boardService.getBoardName(boardId);
+            if (!boardName.equals("전체보기")) {
+                BoardDto boardDto1 = new BoardDto();
+                boardDto1.setBoardId(boardId);
+
+                PostDto postDto = new PostDto();
+                postDto.setPostTitle(postBoardDto.getPostTitle());
+                postDto.setPostContent(postBoardDto.getPostContent());
+                postDto.setPostWriter(postBoardDto.getPostWriter());
+                postDto.setBoard(boardDto1.toEntity());
+                postDto = postService.createPost(postDto);
+                returnMap.put("postId", postDto.getPostId());
+            } else {
+                returnMap.put("msg", "잘못된 접근입니다.");
+            }
+        } catch (Exception e) {
+            returnMap.put("msg", "게시글 작성중 오류가 발생했습니다.");
+        }
+
+        return returnMap;
+    }
+
+    @GetMapping("/{boardId}/view/{postId}")
+    public ModelAndView getPost(
+            @PathVariable("boardId") String boardId,
+            @PathVariable("postId") Long postId,
+            ModelAndView mv) {
+        return mv;
     }
 }

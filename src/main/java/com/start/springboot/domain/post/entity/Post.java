@@ -3,7 +3,6 @@ package com.start.springboot.domain.post.entity;
 import com.start.springboot.domain.attach.entity.Attach;
 import com.start.springboot.domain.board.entity.Board;
 import com.start.springboot.domain.post.dto.PostDto;
-import com.start.springboot.domain.reply.dto.ReplyDto;
 import com.start.springboot.domain.reply.entity.Reply;
 import lombok.Builder;
 import lombok.Getter;
@@ -17,7 +16,6 @@ import org.hibernate.annotations.UpdateTimestamp;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.sql.Timestamp;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -48,9 +46,12 @@ public class Post {
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
     private List<Reply> replies;
 
+    @NotNull
     private String postTitle; /* 게시글 제목 */
 
     @NotNull
+    @Lob
+    @Column(columnDefinition = "MEDIUMTEXT")
     private String postContent; /* 게시글 내용 */
 
     @ColumnDefault("'Y'")

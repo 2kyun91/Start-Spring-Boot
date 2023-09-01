@@ -5,17 +5,20 @@
             <br>
             <p>
                 현재 게시판은
-                <em class="text-primary" style="font-style: normal; font-size: xx-large;" th:each="board : ${boarList}" th:if="${board.boardId eq boardId}" th:text="${board.boardName}"></em>
+                <em class="text-primary" style="font-style: normal; font-size: xx-large;" th:text="${boardName}"></em>
                 입니다.
             </p>
             <br>
-            <form method="post">
+            <form>
                 <div class="mb-3">
                     <label for="boardId" class="form-label">게시판</label>
-                    <select th:if="${boardName eq '전체보기'}" id="boardId" class="w-25 p-2 form-select" aria-label="Default select">
-                        <option value="" selected>게시판을 선택해주세요.</option>
-                        <option th:each="board : ${boarList}" th:if="${board.boardName ne '전체보기'}" th:value="${board.boardId}" th:text="${board.boardName}"></option>
+                    <select id="boardId" class="w-25 p-3 form-select" aria-label="Default select">
+                        <option th:if="${boardName eq '전체보기'}" value="" selected>게시판을 선택해주세요.</option>
+                        <option th:unless="${boardName eq '전체보기'}" th:value="${boardId}" th:text="${boardName}" selected></option>
+                        <option th:each="board : ${boarList}" th:if="${boardName eq '전체보기' and board.boardName ne '전체보기'}" th:value="${board.boardId}" th:text="${board.boardName}"></option>
                     </select>
+                    <!-- 로그인 기능 구현되면 지우기 -->
+                    <input id="postWriter" value="자바" type="hidden">
                 </div>
 
                 <div class="mb-3">
@@ -25,12 +28,17 @@
 
                 <div class="mb-3">
                     <label for="attaches" class="form-label">첨부파일</label>
-                    <input id="attaches" class="form-control form-control-lg" type="file" multiple>
+                    <input id="attaches" class="form-control form-control-lg" type="file" multiple disabled>
                 </div>
 
                 <div class="mb-3 ">
                     <label for="summernote" class="form-label">내용</label>
                     <div id="summernote"></div>
+                </div>
+
+                <div style="float: right;">
+                    <button id="btnSave" class="btn btn-outline-success">확인</button>
+                    <button id="btnCancel" class="btn btn-outline-danger">취소</button>
                 </div>
             </form>
         </section>
