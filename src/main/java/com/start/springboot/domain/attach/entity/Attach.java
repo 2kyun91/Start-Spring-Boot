@@ -28,7 +28,13 @@ public class Attach {
     private Long attachId; /* 첨부파일 Id */
 
     @NotNull
-    private String attachPath; /* 첨부파일 경로 */
+    private String attachPath; /* 첨부파일 저장 경로 */
+
+    @NotNull
+    private String attachOriginalName; /* 첨부파일 원본명 */
+
+    @NotNull
+    private String attachPhysicalName; /* 첨부파일 물리명 */
 
     @ColumnDefault("'Y'")
     private String attachShowYn; /* 첨부파일 노출 여부 */
@@ -45,9 +51,11 @@ public class Attach {
     private Timestamp attachUpdateDate; /* 첨부파일 경로 */
 
     @Builder
-    public Attach(Long attachId, String attachPath, String attachShowYn, Post post, Timestamp attachCreateDate, Timestamp attachUpdateDate) {
+    public Attach(Long attachId, String attachPath, String attachOriginalName, String attachPhysicalName, String attachShowYn, Post post, Timestamp attachCreateDate, Timestamp attachUpdateDate) {
         this.attachId = attachId;
         this.attachPath = attachPath;
+        this.attachOriginalName = attachOriginalName;
+        this.attachPhysicalName = attachPhysicalName;
         this.attachShowYn = attachShowYn;
         this.post = post;
         this.attachCreateDate = attachCreateDate;
@@ -58,6 +66,8 @@ public class Attach {
         AttachDto attachDto = new AttachDto();
         attachDto.setAttachId(attach.getAttachId());
         attachDto.setAttachPath(attach.getAttachPath());
+        attachDto.setAttachOriginalName(attach.getAttachOriginalName());
+        attachDto.setAttachPhysicalName(attach.getAttachPhysicalName());
         attachDto.setAttachShowYn(attach.getAttachShowYn());
         attachDto.setPost(attach.getPost());
         attachDto.setAttachCreateDate(attach.getAttachCreateDate());

@@ -25,37 +25,41 @@
                 // var markupStr = $('#summernote').summernote('code'); // get
                 // var markupStr = 'hello world';
                 // $('#summernote').summernote('code', markupStr); // set
-
-                $("#btnSave").on("click", function () {
-                    let url = $(location).attr('pathname');
-                    let data = {
-                        "boardId": $("#boardId option:selected").val(),
-                        "postTitle": $("#postTitle").val(),
-                        "postContent": $('#summernote').summernote('code'),
-                        "postWriter": $("#postWriter").val(),
-                        // "attaches" : attaches // 여기서부터 이어서...
-                    }
-
-                    $.ajax({
-                        type: 'post',
-                        url: url,
-                        async: true,
-                        dataType: 'json',
-                        data: data,
-                        success: function (result) {
-                            if (result.msg) {
-                                alert(result.msg);
-                                location.href = "/board/[(${boardId})]/list";
-                            } else {
-                                location.href = "/board/[(${boardId})]/view/" + result.postId;
-                            }
-                        },
-                        error: function (request, status, error) {
-                            console.log(error);
-                        }
-                    })
-                });
             });
+
+            function btnSaveClick() {
+                let url = $(location).attr('pathname');
+                let form = $('#writePostForm')[0];
+                let formData = new FormData(form);
+                formData.append("postContent", $('#summernote').summernote('code'));
+
+                $.ajax({
+                    type: 'post',
+                    enctype: 'multipart/form-data',
+                    url: url,
+                    async: false,
+                    data: formData,
+                    dataType: 'json',
+                    processData: false,
+                    contentType: false,
+                    success: function (result) {
+                        location.href = "/board/[(${boardId})]/list";
+                        // if (result.msg) {
+                        //     alert(result.msg);
+                        //     location.href = "/board/[(${boardId})]/list";
+                        // } else {
+                        //     location.href = "/board/[(${boardId})]/view/" + result.postId;
+                        // }
+                    },
+                    error: function (request, status, error) {
+                        console.log(error);
+                    }
+                })
+            }
+
+            function btnCancelClick() {
+                location.href = "/board/[(${boardId})]/list";
+            }
         </script>
     </th:block>
 </div>

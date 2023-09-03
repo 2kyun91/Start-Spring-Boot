@@ -15,6 +15,7 @@ import com.start.springboot.domain.post.dto.PostBoardDto;
 import com.start.springboot.domain.post.dto.PostDto;
 import com.start.springboot.domain.post.entity.Post;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.lang3.BooleanUtils;
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.Page;
@@ -166,10 +167,16 @@ public class PostRepositoryImpl implements PostRepositoryCustom {
 
         JPAQuery<Long> postListCountQuery = jpaQueryFactory
                 .select(post.count())
-                .from(post);
+                .from(post)
+                .innerJoin(post.board, board);
 
-        if (!ObjectUtils.isEmpty(searchDto)) {
-            BooleanBuilder booleanBuilder = searchDto.makeBooleanBuilder(post);
+        if (!searchDto.isViewAll()) {
+            postListQuery.on(board.boardId.eq(searchDto.getBoardId()));
+            postListCountQuery.on(board.boardId.eq(searchDto.getBoardId()));
+        }
+
+        BooleanBuilder booleanBuilder = searchDto.makeBooleanBuilder(post);
+        if (!ObjectUtils.isEmpty(booleanBuilder)) {
             postListQuery.where(booleanBuilder);
             postListCountQuery.where(booleanBuilder);
         }

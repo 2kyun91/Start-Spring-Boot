@@ -16,6 +16,10 @@ public class AttachDto {
 
     private String attachPath;
 
+    private String attachOriginalName;
+
+    private String attachPhysicalName;
+
     private String attachShowYn;
 
     private Post post;
@@ -28,6 +32,8 @@ public class AttachDto {
         return Attach.builder()
                 .attachId(attachId)
                 .attachPath(attachPath)
+                .attachOriginalName(attachOriginalName)
+                .attachPhysicalName(attachPhysicalName)
                 .attachShowYn(attachShowYn)
                 .post(post)
                 .attachCreateDate(attachCreateDate)

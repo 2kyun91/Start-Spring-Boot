@@ -19,11 +19,13 @@ public class SearchDto {
 
     private Long boardId;
 
+    private boolean isViewAll;
+
     public BooleanBuilder makeBooleanBuilder(QPost post) {
         BooleanBuilder booleanBuilder = new BooleanBuilder();
 
-        if (boardId != 1) { // 1 : 전체보기
-            booleanBuilder.and(post.board.boardId.eq(boardId));
+        if (boardId == 1) { // 1 : 전체보기
+            isViewAll = true;
         }
 
         if (StringUtils.isEmpty(searchType) || StringUtils.isEmpty(searchWord)) {

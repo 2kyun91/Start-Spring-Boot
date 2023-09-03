@@ -1,10 +1,10 @@
 package com.start.springboot.domain.post.dto;
 
-import com.start.springboot.domain.attach.entity.Attach;
 import com.start.springboot.domain.reply.entity.Reply;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.sql.Timestamp;
 import java.util.List;
@@ -34,7 +34,7 @@ public class PostBoardDto {
 
     private String boardName;
 
-    private List<Attach> attaches;
+    private List<MultipartFile> files;
 
     private int attachesCount;
 

@@ -3,6 +3,9 @@ package com.start.springboot.domain.board.controller;
 import com.start.springboot.common.page.PageDto;
 import com.start.springboot.common.page.Pagination;
 import com.start.springboot.common.search.SearchDto;
+import com.start.springboot.common.util.PostUpload;
+import com.start.springboot.domain.attach.dto.AttachDto;
+import com.start.springboot.domain.attach.service.AttachService;
 import com.start.springboot.domain.board.dto.BoardDto;
 import com.start.springboot.domain.board.service.BoardService;
 import com.start.springboot.domain.post.dto.PostBoardDto;
@@ -15,6 +18,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.HashMap;
@@ -25,8 +29,9 @@ import java.util.Map;
 @RequestMapping("/board")
 @RequiredArgsConstructor
 public class BoardController {
-    private final PostService postService;
     private final BoardService boardService;
+    private final PostService postService;
+    private final AttachService attachService;
 
     @RequestMapping("/{boardId}/list")
     @ResponseBody
@@ -74,7 +79,7 @@ public class BoardController {
     @ResponseBody
     public Map<String, Object> saveWriteForm(
             @PathVariable("boardId") Long boardId,
-            PostBoardDto postBoardDto) {
+            PostBoardDto postBoardDto, PostUpload postUpload) {
         Map<String, Object> returnMap = new HashMap<>();
         try {
             String boardName = boardService.getBoardName(boardId);
@@ -88,11 +93,23 @@ public class BoardController {
                 postDto.setPostWriter(postBoardDto.getPostWriter());
                 postDto.setBoard(boardDto1.toEntity());
                 postDto = postService.createPost(postDto);
+
+                List<MultipartFile> files = postBoardDto.getFiles();
+                if (!files.isEmpty()) {
+                    postUpload.saveFiles(files);
+                    List<AttachDto> attachDtos = postUpload.getAttachDtos();
+                    for (AttachDto attachDto : attachDtos) {
+                        attachDto.setPost(postDto.toEntity());
+                        attachService.createAttach(attachDto);
+                    }
+                }
                 returnMap.put("postId", postDto.getPostId());
             } else {
                 returnMap.put("msg", "잘못된 접근입니다.");
             }
         } catch (Exception e) {
+            // exception 핸들러 구현하기(@ControllerAdvice, @ExceptionHandler)
+            e.printStackTrace();
             returnMap.put("msg", "게시글 작성중 오류가 발생했습니다.");
         }
 
