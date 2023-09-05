@@ -5,6 +5,7 @@
     <div id="content">
         <div th:if="${#httpServletRequest.requestURI.contains('/list')}" th:insert="~{post/list::list}"/>
         <div th:if="${#httpServletRequest.requestURI.contains('/write')}" th:insert="~{post/write::write}"/>
+        <div th:if="${#httpServletRequest.requestURI.contains('/view')}" th:insert="~{post/view::view}"/>
     </div>
 </div>
 

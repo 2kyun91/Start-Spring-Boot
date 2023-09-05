@@ -1,11 +1,15 @@
 package com.start.springboot.common.util;
 
+import com.start.springboot.common.errors.errorcode.CommonErrorCode;
+import com.start.springboot.common.errors.exception.CustomException;
 import com.start.springboot.domain.attach.dto.AttachDto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -15,6 +19,7 @@ import java.util.UUID;
 
 @Getter
 @NoArgsConstructor
+@Component
 public class PostUpload {
     private List<AttachDto> attachDtos = new ArrayList<>();
 
@@ -53,8 +58,7 @@ public class PostUpload {
 
                         attachDtos.add(attachDto);
                     } catch (IOException e) {
-                        // exception 핸들러 구현하기(@ControllerAdvice, @ExceptionHandler)
-                        e.printStackTrace();
+                        throw new CustomException(CommonErrorCode.FILE_NOT_FOUND);
                     }
                 }
             });

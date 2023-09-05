@@ -45,9 +45,6 @@ public class Pagination<T> {
 
         this.prevPage = startPage.getPageNumber() <= 0 ? null : startPage.previousOrFirst();
 
-//        System.out.println("tempEndNumber : " + tempEndNumber);
-//        System.out.println("totalPageNumber : " + totalPageNumber);
-
         if (this.totalPageNumber < tempEndNumber) {
             tempEndNumber = this.totalPageNumber;
             this.nextPage = null;

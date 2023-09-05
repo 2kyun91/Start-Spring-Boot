@@ -1,11 +1,14 @@
 package com.start.springboot.domain.post.service;
 
 import com.querydsl.core.Tuple;
+import com.start.springboot.common.errors.errorcode.CommonErrorCode;
+import com.start.springboot.common.errors.exception.CustomException;
 import com.start.springboot.common.search.SearchDto;
 import com.start.springboot.domain.post.dto.PostBoardDto;
 import com.start.springboot.domain.post.dto.PostDto;
 import com.start.springboot.domain.post.entity.Post;
 import com.start.springboot.domain.post.repository.PostRepository;
+import com.start.springboot.domain.reply.dto.ReplyDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -21,8 +24,8 @@ import java.util.List;
 public class PostService {
     private final PostRepository postRepository;
 
-    public Post getPost(Long postId) {
-        return postRepository.findById(postId).orElseGet(() -> null);
+    public Post getPostQueryMethod(Long postId) {
+        return postRepository.findById(postId).orElseThrow(() -> new CustomException(CommonErrorCode.RESOURCE_NOT_FOUND));
     }
 
     public PostDto createPost(PostDto postDto) {
@@ -79,5 +82,33 @@ public class PostService {
 
     public Page<PostBoardDto> getPostList(SearchDto searchDto, Pageable pageable) {
         return postRepository.getPostList(searchDto, pageable);
+    }
+
+    public PostBoardDto getPost(Long postId) {
+        PostBoardDto postBoardDto = new PostBoardDto();
+        Post post = getPostQueryMethod(postId);
+
+        // 게시글 기본
+        postBoardDto.setPostTitle(post.getPostTitle());
+        postBoardDto.setPostContent(post.getPostContent());
+        postBoardDto.setPostWriter(post.getPostWriter());
+        postBoardDto.setPostViewCount(post.getPostViewCount());
+
+        // 게시글의 답변
+        List<ReplyDto> replyDtos = new ArrayList<>();
+        post.getReplies().stream().forEach(reply -> {
+            replyDtos.add(reply.toDto(reply));
+        });
+        postBoardDto.setReplyDtos(replyDtos);
+        postBoardDto.setRepliesCount(replyDtos.size());
+
+//        // 게시글의 첨부파일
+//        List<AttachDto> attachDtos = new ArrayList<>();
+//        post.getAttaches().stream().forEach(attach -> {
+//            attachDtos.add(attach.toDto(attach));
+//        });
+//        postBoardDto.setAttachesCount(attachDtos.size());
+
+        return postBoardDto;
     }
 }

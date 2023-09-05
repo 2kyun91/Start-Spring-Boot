@@ -5,8 +5,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 
 public class PageDto {
-    private static final int DEFAULT_SIZE = 5;
-    private static final int DEFAULT_MAX_SIZE = 10;
+    private static final int DEFAULT_SIZE = 10;
+    private static final int DEFAULT_MAX_SIZE = 50;
 
     private int page;
     private int size;

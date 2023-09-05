@@ -63,9 +63,13 @@
                         $("#content").html(result);
                     },
                     error: function (request, status, error) {
-                        console.log(error)
+                        alert(request.responseJSON.message);
                     }
                 });
+            }
+
+            function getPostDetail(boardId, postId) {
+                location.href = "/board/" + boardId + "/view/" + postId;
             }
         </script>
     </th:block>

@@ -1,0 +1,31 @@
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+    <div th:fragment="view">
+        <section class="text-bg-light">
+            <h1 style="text-align: center;">게시글 상세</h1>
+            <br>
+            <p>
+                현재 게시글은
+                <em class="text-primary" style="font-style: normal; font-size: xx-large;" th:text="${boardName}"></em>
+                게시판의 글입니다.
+            </p>
+            <br>
+            <div class="mb-3 form-group">
+                <input id="postTitle" name="postTitle" class="form-control form-control-lg" type="text">
+            </div>
+
+            <div class="mb-3 form-group">
+                <input id="files" name="files" class="form-control form-control-lg" type="file" multiple>
+            </div>
+
+            <div class="mb-3 form-group">
+                <div id="postContent" th:utext="${postDetail.postContent}"></div>
+            </div>
+
+            <div style="float: right;">
+                <button id="btnSave" type="button" onclick="btnSaveClick();" class="btn btn-outline-success">확인</button>
+                <button id="btnCancel" type="button" onclick="btnCancelClick();" class="btn btn-outline-danger">취소</button>
+            </div>
+        </section>
+        <div th:replace="~{post/view_footer::view_footer}"/>
+    </div>
+</html>

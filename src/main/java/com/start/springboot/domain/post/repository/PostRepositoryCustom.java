@@ -10,22 +10,22 @@ import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
-public interface PostRepositoryCustom {
-    public long updatePost(Post post);
+interface PostRepositoryCustom {
+    long updatePost(Post post);
 
-    public List<Post> findByPostTitleContaining(String postTitle);
+    List<Post> findByPostTitleContaining(String postTitle);
 
-    public List<Post> findByPostTitleContainingAndPostIdGreaterThanAndPostIdLessThanOrderByPostIdDesc(String postTitle, Long postIdGreater, Long postIdLess, Pageable pageable);
+    List<Post> findByPostTitleContainingAndPostIdGreaterThanAndPostIdLessThanOrderByPostIdDesc(String postTitle, Long postIdGreater, Long postIdLess, Pageable pageable);
 
-    public Page<PostDto> findByPostTitleContainingAndPostIdGreaterThanAndPostIdLessThan(String postTitle, Long postIdGreater, Long postIdLess, Pageable pageable);
+    Page<PostDto> findByPostTitleContainingAndPostIdGreaterThanAndPostIdLessThan(String postTitle, Long postIdGreater, Long postIdLess, Pageable pageable);
 
-    public Page<PostDto> findByPostTitleContainingAndPostIdLessThan(String postTitle, Long postIdLess, Pageable pageable);
+    Page<PostDto> findByPostTitleContainingAndPostIdLessThan(String postTitle, Long postIdLess, Pageable pageable);
 
-    public List<PostDto> findByPostTitleAndPostIdGreaterThan(String postTitle, Long postIdGreater);
+    List<PostDto> findByPostTitleAndPostIdGreaterThan(String postTitle, Long postIdGreater);
 
-    public List<Tuple> findByPostTitleAndPostIdGreaterThan2(String postTitle, Long postIdGreater);
+    List<Tuple> findByPostTitleAndPostIdGreaterThan2(String postTitle, Long postIdGreater);
 
-    public List<Tuple> findByPostWithAttachCountOrderByPostIdDesc(String postTitle);
+    List<Tuple> findByPostWithAttachCountOrderByPostIdDesc(String postTitle);
 
-    public Page<PostBoardDto> getPostList(SearchDto searchDto, Pageable pageable);
+    Page<PostBoardDto> getPostList(SearchDto searchDto, Pageable pageable);
 }

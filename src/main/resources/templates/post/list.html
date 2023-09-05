@@ -1,23 +1,36 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
     <div th:fragment="list">
         <div th:replace="~{post/list_header::list_header}"/>
-        <div th:if="${totalElements > 0}" th:with="postList=${pagination.result.content}">
-            <ul th:each="post, iter : ${postList}" th:if="${post.postShowYn == 'Y'}" class="list-group" style="margin-bottom: 10px;">
-                <li th:text="'게시글 Id : ' + ${post.postId}" class="list-group-item">게시글 Id</li>
-                <li th:text="'게시글 제목 : ' + ${post.postTitle}" class="list-group-item">게시글 제목</li>
-                <li th:text="'게시글 내용 : ' + ${post.postContent}" class="list-group-item">게시글 내용</li>
-                <!--            <li th:text="'게시글 노출여부 : ' + ${post.postShowYn}" class="list-group-item">게시글 내용</li>-->
-                <li th:text="'게시글 작성자 : ' + ${post.postWriter}" class="list-group-item">게시글 작성자</li>
-                <li th:text="'게시글 조회수 : ' + ${post.postViewCount}" class="list-group-item">게시글 조회수</li>
-                <li th:text="'게시글 작성일 : ' + ${#dates.format(post.postCreateDate, 'yyyy-MM-dd')}" class="list-group-item">게시글 작성일</li>
-                <!--            <li th:text="'게시글 - 게시판 Id : ' + ${post.boardId}" class="list-group-item">게시글 - 게시판 Id</li>-->
-                <li th:text="'게시글 - 게시판 이름 : ' + ${post.boardName}" class="list-group-item">게시글 - 게시판 이름</li>
-                <li th:text="'게시글 - 댓글 갯수 : ' + ${post.attachesCount}" class="list-group-item">게시글 댓글 갯수</li>
-                <li th:text="'게시글 - 첨부파일 갯수 : ' + ${post.repliesCount}" class="list-group-item">게시글 첨부파일 갯수</li>
-            </ul>
-        </div>
-        <div th:unless="${totalElements > 0}">
-            <p style="text-align: center">해당하는 게시글이 없습니다.</p>
+        <div>
+            <table class="table table-dark table-striped" style="text-align: center;">
+                <thead>
+                    <tr>
+                        <th scope="col">글번호</th>
+                        <th th:if="${boardId eq 1}" scope="col">제목 | 게시판</th>
+                        <th th:unless="${boardId eq 1}" scope="col">제목</th>
+                        <th scope="col">댓글</th>
+                        <th scope="col">첨부파일</th>
+                        <th scope="col">작성자</th>
+                        <th scope="col">작성일</th>
+                    </tr>
+                </thead>
+                <tbody th:if="${totalElements > 0}" th:with="postList=${pagination.result.content}">
+                    <tr th:each="post, iter : ${postList}" th:if="${post.postShowYn == 'Y'}" th:boardId="${post.boardId}" th:postId="${post.postId}" th:onclick="getPostDetail(this.getAttribute('boardId'), this.getAttribute('postId'))">
+                        <th scope="row" th:text="${post.postId}"></th>
+                        <td th:if="${boardId eq 1}" th:text="${post.postTitle} + ' | ' + ${post.boardName}"></td>
+                        <td th:unless="${boardId eq 1}" th:text="${post.postTitle}"></td>
+                        <td th:text="${post.repliesCount}"></td>
+                        <td th:text="${post.attachesCount}"></td>
+                        <td th:text="${post.postWriter}"></td>
+                        <td th:text="${#dates.format(post.postUpdateDate, 'yyyy-MM-dd')}"></td>
+                    </tr>
+                </tbody>
+                <tbody th:unless="${totalElements > 0}" th:with="postList=${pagination.result.content}">
+                    <tr>
+                        <td th:colspan="6" style="text-align: center;">해당하는 게시글이 없습니다.</td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
         <div th:replace="~{post/list_footer::list_footer}"/>
     </div>

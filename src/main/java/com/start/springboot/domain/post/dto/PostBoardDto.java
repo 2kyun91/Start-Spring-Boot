@@ -1,6 +1,6 @@
 package com.start.springboot.domain.post.dto;
 
-import com.start.springboot.domain.reply.entity.Reply;
+import com.start.springboot.domain.reply.dto.ReplyDto;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -28,7 +28,7 @@ public class PostBoardDto {
 
     private int postViewCount;
 
-    private Timestamp postCreateDate;
+    private Timestamp postUpdateDate;
 
     private Long boardId;
 
@@ -38,7 +38,7 @@ public class PostBoardDto {
 
     private int attachesCount;
 
-    private List<Reply> replies;
+    private List<ReplyDto> replyDtos;
 
     private int repliesCount;
 }

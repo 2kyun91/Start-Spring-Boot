@@ -63,7 +63,7 @@ public class PostRepositoryTests {
 
     @Test
     public Post testGetPost() {
-        Post post = postService.getPost(1L);
+        Post post = postService.getPostQueryMethod(1L);
         if (!ObjectUtils.isEmpty(post)) {
             System.out.println(post);
         } else {
@@ -99,7 +99,7 @@ public class PostRepositoryTests {
     @Test
     public void testUpdatePost() {
         //Post post = testGetPost();
-        Post post = postService.getPost(1L);
+        Post post = postService.getPostQueryMethod(1L);
         if (!ObjectUtils.isEmpty(post)) {
             PostDto postDto = new PostDto();
             postDto.setPostId(post.getPostId());
@@ -218,7 +218,7 @@ public class PostRepositoryTests {
     @Transactional
     @Commit
     public void testUpdatePostIncludeAttach() {
-        Post post = postService.getPost(204L);
+        Post post = postService.getPostQueryMethod(204L);
         if (!ObjectUtils.isEmpty(post)) {
             post.getAttaches().forEach(v -> {
                 AttachDto attachDto = new AttachDto();
@@ -265,7 +265,7 @@ public class PostRepositoryTests {
 
     @Test
     public void testGetPostAndCreateReply() {
-        Post post = postService.getPost(1L);
+        Post post = postService.getPostQueryMethod(1L);
         if (!ObjectUtils.isEmpty(post)) {
             ReplyDto replyDto = new ReplyDto();
             replyDto.setReplyContent("저도 독서실에 와서 공부중입니다. 화이팅!");

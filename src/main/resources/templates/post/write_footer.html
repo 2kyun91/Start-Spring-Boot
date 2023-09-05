@@ -39,20 +39,17 @@
                     url: url,
                     async: false,
                     data: formData,
-                    dataType: 'json',
+                    // dataType: 'json',
                     processData: false,
                     contentType: false,
                     success: function (result) {
-                        location.href = "/board/[(${boardId})]/list";
-                        // if (result.msg) {
-                        //     alert(result.msg);
-                        //     location.href = "/board/[(${boardId})]/list";
-                        // } else {
-                        //     location.href = "/board/[(${boardId})]/view/" + result.postId;
-                        // }
+                        // location.href = "/board/[(${boardId})]/list";
+                        location.href = "/board/[(${boardId})]/view/" + result.postId;
                     },
                     error: function (request, status, error) {
-                        console.log(error);
+                        if (request.responseJSON) {
+                            alert(request.responseJSON.message);
+                        }
                     }
                 })
             }

@@ -15,9 +15,7 @@ import com.start.springboot.domain.post.dto.PostBoardDto;
 import com.start.springboot.domain.post.dto.PostDto;
 import com.start.springboot.domain.post.entity.Post;
 import lombok.RequiredArgsConstructor;
-import org.apache.commons.lang3.BooleanUtils;
 import org.apache.commons.lang3.ObjectUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -28,8 +26,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-import static com.start.springboot.domain.post.entity.QPost.post;
 import static com.start.springboot.domain.board.entity.QBoard.board;
+import static com.start.springboot.domain.post.entity.QPost.post;
 
 @Repository
 @RequiredArgsConstructor
@@ -149,7 +147,7 @@ public class PostRepositoryImpl implements PostRepositoryCustom {
                                 post.postShowYn,
                                 post.postWriter,
                                 post.postViewCount,
-                                post.postCreateDate,
+                                post.postUpdateDate,
                                 post.board.boardId,
                                 post.board.boardName,
                                 ExpressionUtils.as(
@@ -176,7 +174,7 @@ public class PostRepositoryImpl implements PostRepositoryCustom {
         }
 
         BooleanBuilder booleanBuilder = searchDto.makeBooleanBuilder(post);
-        if (!ObjectUtils.isEmpty(booleanBuilder)) {
+        if (!ObjectUtils.isEmpty(booleanBuilder.getValue())) {
             postListQuery.where(booleanBuilder);
             postListCountQuery.where(booleanBuilder);
         }

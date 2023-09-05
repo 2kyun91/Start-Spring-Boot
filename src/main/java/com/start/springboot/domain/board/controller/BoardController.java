@@ -1,5 +1,7 @@
 package com.start.springboot.domain.board.controller;
 
+import com.start.springboot.common.errors.errorcode.CommonErrorCode;
+import com.start.springboot.common.errors.exception.CustomException;
 import com.start.springboot.common.page.PageDto;
 import com.start.springboot.common.page.Pagination;
 import com.start.springboot.common.search.SearchDto;
@@ -20,6 +22,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.HashMap;
 import java.util.List;
@@ -79,38 +82,32 @@ public class BoardController {
     @ResponseBody
     public Map<String, Object> saveWriteForm(
             @PathVariable("boardId") Long boardId,
-            PostBoardDto postBoardDto, PostUpload postUpload) {
+            PostBoardDto postBoardDto, PostUpload postUpload, RedirectAttributes rttr) {
         Map<String, Object> returnMap = new HashMap<>();
-        try {
-            String boardName = boardService.getBoardName(boardId);
-            if (!boardName.equals("전체보기")) {
-                BoardDto boardDto1 = new BoardDto();
-                boardDto1.setBoardId(boardId);
+        String boardName = boardService.getBoardName(boardId);
 
-                PostDto postDto = new PostDto();
-                postDto.setPostTitle(postBoardDto.getPostTitle());
-                postDto.setPostContent(postBoardDto.getPostContent());
-                postDto.setPostWriter(postBoardDto.getPostWriter());
-                postDto.setBoard(boardDto1.toEntity());
-                postDto = postService.createPost(postDto);
+        if (!boardName.equals("전체보기")) {
+            BoardDto boardDto1 = new BoardDto();
+            boardDto1.setBoardId(boardId);
 
-                List<MultipartFile> files = postBoardDto.getFiles();
-                if (!files.isEmpty()) {
-                    postUpload.saveFiles(files);
-                    List<AttachDto> attachDtos = postUpload.getAttachDtos();
-                    for (AttachDto attachDto : attachDtos) {
-                        attachDto.setPost(postDto.toEntity());
-                        attachService.createAttach(attachDto);
-                    }
-                }
-                returnMap.put("postId", postDto.getPostId());
-            } else {
-                returnMap.put("msg", "잘못된 접근입니다.");
+            PostDto postDto = new PostDto();
+            postDto.setPostTitle(postBoardDto.getPostTitle());
+            postDto.setPostContent(postBoardDto.getPostContent());
+            postDto.setPostWriter(postBoardDto.getPostWriter());
+            postDto.setBoard(boardDto1.toEntity());
+            postDto = postService.createPost(postDto);
+
+            List<MultipartFile> files = postBoardDto.getFiles();
+            postUpload.saveFiles(files);
+
+            List<AttachDto> attachDtos = postUpload.getAttachDtos();
+            for (AttachDto attachDto : attachDtos) {
+                attachDto.setPost(postDto.toEntity());
+                attachService.createAttach(attachDto);
             }
-        } catch (Exception e) {
-            // exception 핸들러 구현하기(@ControllerAdvice, @ExceptionHandler)
-            e.printStackTrace();
-            returnMap.put("msg", "게시글 작성중 오류가 발생했습니다.");
+            returnMap.put("postId", postDto.getPostId());
+        } else {
+            throw new CustomException(CommonErrorCode.INVALID_PARAMETER);
         }
 
         return returnMap;
@@ -118,9 +115,17 @@ public class BoardController {
 
     @GetMapping("/{boardId}/view/{postId}")
     public ModelAndView getPost(
-            @PathVariable("boardId") String boardId,
+            @PathVariable("boardId") Long boardId,
             @PathVariable("postId") Long postId,
             ModelAndView mv) {
+        mv.setViewName("/board/main");
+        String boardName = boardService.getBoardName(boardId);
+        PostBoardDto postBoardDto = postService.getPost(postId);
+
+        mv.addObject("boardId", boardId);
+        mv.addObject("boardName", boardName);
+        mv.addObject("postId", postId);
+        mv.addObject("postDetail", postBoardDto);
         return mv;
     }
 }
