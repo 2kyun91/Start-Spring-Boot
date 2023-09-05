@@ -9,21 +9,27 @@
                 게시판의 글입니다.
             </p>
             <br>
-            <div class="mb-3 form-group">
-                <input id="postTitle" name="postTitle" class="form-control form-control-lg" type="text">
-            </div>
-
-            <div class="mb-3 form-group">
-                <input id="files" name="files" class="form-control form-control-lg" type="file" multiple>
-            </div>
-
-            <div class="mb-3 form-group">
-                <div id="postContent" th:utext="${postDetail.postContent}"></div>
-            </div>
+            <main class="form-signin" style="max-width: 100%;">
+                <div class="container border rounded flex-md-row mb-4 shadow-sm h-md-250">
+                    <div class="form-floating m-3">
+                        <h3 th:text="'제목 : ' + ${postDetail.postTitle}"></h3>
+                    </div>
+                    <div class="form-floating m-3 border-top border-1" th:if="${postDetail.attachesCount > 0}">
+                        <ul class="list-inline" style="margin-top: 10px;">
+                            <li class="list-inline-item" style="font-size: x-large;">첨부파일 : </li>
+                            <li id="postTitle" th:each="attach : ${postDetail.attachDtos}" class="list-inline-item" style="width: fit-content">
+                                <button class="btn btn-secondary" th:postId="${attach.post.postId}" th:attachId="${attach.attachId}" th:onclick="downloadFile(this.getAttribute('postId'), this.getAttribute('attachId'))" th:if="${#strings.length(attach.attachOriginalName) > 15}" th:text="${#strings.substring(attach.attachOriginalName, 0, 15)} + ' ...'" type="button"></button>
+                                <button class="btn btn-secondary" th:postId="${attach.post.postId}" th:attachId="${attach.attachId}" th:onclick="downloadFile(this.getAttribute('postId'), this.getAttribute('attachId'))" th:unless="${#strings.length(attach.attachOriginalName) > 15}" th:text="${attach.attachOriginalName}" type="button"></button>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="form-floating m-3 border border-3" style="font-size: x-large; text-align: center;" th:utext="${postDetail.postContent}"></div>
+                </div>
+            </main>
 
             <div style="float: right;">
-                <button id="btnSave" type="button" onclick="btnSaveClick();" class="btn btn-outline-success">확인</button>
-                <button id="btnCancel" type="button" onclick="btnCancelClick();" class="btn btn-outline-danger">취소</button>
+                <button id="btnModify" type="button" onclick="btnModifyClick();" class="btn btn-outline-success">수정</button>
+                <button id="btnList" type="button" onclick="btnListClick();" class="btn btn-outline-danger">목록</button>
             </div>
         </section>
         <div th:replace="~{post/view_footer::view_footer}"/>

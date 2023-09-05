@@ -39,11 +39,10 @@
                     url: url,
                     async: false,
                     data: formData,
-                    // dataType: 'json',
+                    dataType: 'json',
                     processData: false,
                     contentType: false,
                     success: function (result) {
-                        // location.href = "/board/[(${boardId})]/list";
                         location.href = "/board/[(${boardId})]/view/" + result.postId;
                     },
                     error: function (request, status, error) {

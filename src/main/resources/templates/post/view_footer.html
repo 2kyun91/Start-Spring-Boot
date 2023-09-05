@@ -3,9 +3,18 @@
 <div th:fragment="view_footer">
     <th:block layout:fragment="script">
         <script th:inline="javascript">
-            $(function () {
+            function downloadFile(postId, attachId) {
+                alert(postId);
+                alert(attachId);
+            }
 
-            });
+            function btnModifyClick() {
+                alert("수정화면 불러오기");
+            }
+
+            function btnListClick() {
+                location.href = "/board/[(${boardId})]/list";
+            }
         </script>
     </th:block>
 </div>

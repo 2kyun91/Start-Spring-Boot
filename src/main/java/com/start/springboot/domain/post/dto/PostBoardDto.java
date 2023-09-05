@@ -1,5 +1,6 @@
 package com.start.springboot.domain.post.dto;
 
+import com.start.springboot.domain.attach.dto.AttachDto;
 import com.start.springboot.domain.reply.dto.ReplyDto;
 import lombok.Getter;
 import lombok.Setter;
@@ -35,6 +36,8 @@ public class PostBoardDto {
     private String boardName;
 
     private List<MultipartFile> files;
+
+    private List<AttachDto> attachDtos;
 
     private int attachesCount;
 

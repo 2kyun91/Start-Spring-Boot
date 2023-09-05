@@ -5,7 +5,7 @@ import com.start.springboot.common.errors.exception.CustomException;
 import com.start.springboot.common.page.PageDto;
 import com.start.springboot.common.page.Pagination;
 import com.start.springboot.common.search.SearchDto;
-import com.start.springboot.common.util.PostUpload;
+import com.start.springboot.common.util.FileStorageUtil;
 import com.start.springboot.domain.attach.dto.AttachDto;
 import com.start.springboot.domain.attach.service.AttachService;
 import com.start.springboot.domain.board.dto.BoardDto;
@@ -15,9 +15,13 @@ import com.start.springboot.domain.post.dto.PostDto;
 import com.start.springboot.domain.post.service.PostService;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.Resource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -35,6 +39,10 @@ public class BoardController {
     private final BoardService boardService;
     private final PostService postService;
     private final AttachService attachService;
+    private final FileStorageUtil fileStorageUtil;
+
+//    @Value("${spring.servlet.multipart.location}")
+//    private String uploadPath;
 
     @RequestMapping("/{boardId}/list")
     @ResponseBody
@@ -82,7 +90,7 @@ public class BoardController {
     @ResponseBody
     public Map<String, Object> saveWriteForm(
             @PathVariable("boardId") Long boardId,
-            PostBoardDto postBoardDto, PostUpload postUpload, RedirectAttributes rttr) {
+            PostBoardDto postBoardDto) {
         Map<String, Object> returnMap = new HashMap<>();
         String boardName = boardService.getBoardName(boardId);
 
@@ -98,9 +106,9 @@ public class BoardController {
             postDto = postService.createPost(postDto);
 
             List<MultipartFile> files = postBoardDto.getFiles();
-            postUpload.saveFiles(files);
+            fileStorageUtil.uploadFiles(files);
 
-            List<AttachDto> attachDtos = postUpload.getAttachDtos();
+            List<AttachDto> attachDtos = fileStorageUtil.getAttachDtos();
             for (AttachDto attachDto : attachDtos) {
                 attachDto.setPost(postDto.toEntity());
                 attachService.createAttach(attachDto);
@@ -127,5 +135,18 @@ public class BoardController {
         mv.addObject("postId", postId);
         mv.addObject("postDetail", postBoardDto);
         return mv;
+    }
+
+    // 여기서부터 이어서...
+    @GetMapping("/{boardId}/{postId}/download/{attachId}")
+    public ResponseEntity<Resource> downloadFile(
+            @PathVariable("boardId") Long boardId,
+            @PathVariable("postId") Long postId,
+            @PathVariable("attachId") Long attachId
+    ) {
+        String filename = "";
+        Resource file = fileStorageUtil.downloadFile(filename);
+        return ResponseEntity.ok().header(HttpHeaders.CONTENT_DISPOSITION,
+                "attachment; filename=\"" + file.getFilename() + "\"").body(file);
     }
 }

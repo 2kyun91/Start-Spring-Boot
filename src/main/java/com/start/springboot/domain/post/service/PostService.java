@@ -4,6 +4,7 @@ import com.querydsl.core.Tuple;
 import com.start.springboot.common.errors.errorcode.CommonErrorCode;
 import com.start.springboot.common.errors.exception.CustomException;
 import com.start.springboot.common.search.SearchDto;
+import com.start.springboot.domain.attach.dto.AttachDto;
 import com.start.springboot.domain.post.dto.PostBoardDto;
 import com.start.springboot.domain.post.dto.PostDto;
 import com.start.springboot.domain.post.entity.Post;
@@ -102,12 +103,13 @@ public class PostService {
         postBoardDto.setReplyDtos(replyDtos);
         postBoardDto.setRepliesCount(replyDtos.size());
 
-//        // 게시글의 첨부파일
-//        List<AttachDto> attachDtos = new ArrayList<>();
-//        post.getAttaches().stream().forEach(attach -> {
-//            attachDtos.add(attach.toDto(attach));
-//        });
-//        postBoardDto.setAttachesCount(attachDtos.size());
+        // 게시글의 첨부파일
+        List<AttachDto> attachDtos = new ArrayList<>();
+        post.getAttaches().stream().forEach(attach -> {
+            attachDtos.add(attach.toDto(attach));
+        });
+        postBoardDto.setAttachDtos(attachDtos);
+        postBoardDto.setAttachesCount(attachDtos.size());
 
         return postBoardDto;
     }
