@@ -43,6 +43,7 @@ public class FileStorageUtil {
     }
 
     public void uploadFiles(List<MultipartFile> files) {
+        attachDtos.clear();
         if (!files.isEmpty()) {
             files.stream().forEach(file -> {
                 String originalFileName = file.getOriginalFilename();
@@ -85,7 +86,7 @@ public class FileStorageUtil {
                 return resource;
             }
             else {
-                throw new RuntimeException("Could not read file: " + filename);
+                throw new MalformedURLException("Could not read file: " + filename);
             }
         }
         catch (MalformedURLException e) {

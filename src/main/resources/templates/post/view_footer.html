@@ -4,8 +4,7 @@
     <th:block layout:fragment="script">
         <script th:inline="javascript">
             function downloadFile(postId, attachId) {
-                alert(postId);
-                alert(attachId);
+                location.href = "/board/[(${boardId})]/" + postId + "/download/" + attachId;
             }
 
             function btnModifyClick() {

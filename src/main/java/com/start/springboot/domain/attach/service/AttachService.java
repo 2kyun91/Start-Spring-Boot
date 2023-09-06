@@ -1,5 +1,7 @@
 package com.start.springboot.domain.attach.service;
 
+import com.start.springboot.common.errors.errorcode.CommonErrorCode;
+import com.start.springboot.common.errors.exception.CustomException;
 import com.start.springboot.domain.attach.dto.AttachDto;
 import com.start.springboot.domain.attach.entity.Attach;
 import com.start.springboot.domain.attach.repository.AttachRepository;
@@ -30,5 +32,10 @@ public class AttachService {
 
     public void createPostIncludeDummyAttaches(List<Attach> attaches) {
         attachRepository.saveAll(attaches);
+    }
+
+    public AttachDto getAttach(Long attachId) {
+        Attach attach = attachRepository.findById(attachId).orElseThrow(() -> new CustomException(CommonErrorCode.RESOURCE_NOT_FOUND));
+        return attach.toDto(attach);
     }
 }

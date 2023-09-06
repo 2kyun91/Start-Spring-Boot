@@ -63,7 +63,9 @@
                         $("#content").html(result);
                     },
                     error: function (request, status, error) {
-                        alert(request.responseJSON.message);
+                        if (request.responseJSON) {
+                            alert(request.responseJSON.message);
+                        }
                     }
                 });
             }

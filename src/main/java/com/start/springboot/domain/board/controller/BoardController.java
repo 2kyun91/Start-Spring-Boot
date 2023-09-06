@@ -21,6 +21,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -105,7 +106,7 @@ public class BoardController {
             postDto.setBoard(boardDto1.toEntity());
             postDto = postService.createPost(postDto);
 
-            List<MultipartFile> files = postBoardDto.getFiles();
+            List<MultipartFile> files = postBoardDto.getAttachFiles();
             fileStorageUtil.uploadFiles(files);
 
             List<AttachDto> attachDtos = fileStorageUtil.getAttachDtos();
@@ -137,16 +138,25 @@ public class BoardController {
         return mv;
     }
 
-    // 여기서부터 이어서...
     @GetMapping("/{boardId}/{postId}/download/{attachId}")
+    @ResponseBody
     public ResponseEntity<Resource> downloadFile(
             @PathVariable("boardId") Long boardId,
             @PathVariable("postId") Long postId,
-            @PathVariable("attachId") Long attachId
-    ) {
-        String filename = "";
+            @PathVariable("attachId") Long attachId) {
+        AttachDto attachDto = attachService.getAttach(attachId);
+
+        Long testPostId = attachDto.getPost().getPostId();
+        System.out.println("testPostId : " + testPostId);
+        String testPostTitle = attachDto.getPost().getPostTitle();
+        System.out.println("testPostTitle : " + testPostTitle);
+
+        if (!attachDto.getPost().getPostId().equals(postId)) {
+            throw new CustomException(CommonErrorCode.INVALID_PARAMETER);
+        }
+        String filename = attachDto.getAttachPhysicalName();
         Resource file = fileStorageUtil.downloadFile(filename);
         return ResponseEntity.ok().header(HttpHeaders.CONTENT_DISPOSITION,
-                "attachment; filename=\"" + file.getFilename() + "\"").body(file);
+                "attachment; filename=\"" + attachDto.getAttachOriginalName() + "\"").body(file);
     }
 }
