@@ -1,6 +1,6 @@
 <!doctype html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<div th:fragment="write_footer">
+<div th:fragment="modify_footer">
     <th:block layout:fragment="script">
         <script th:inline="javascript">
             $(function () {
@@ -22,9 +22,8 @@
                     codeviewIframeFilter: true
                 });
 
-                // var markupStr = $('#summernote').summernote('code'); // get
-                // var markupStr = 'hello world';
-                // $('#summernote').summernote('code', markupStr); // set
+                var postContent = "[(${postDetail.postContent})]";
+                $('#summernote').summernote('code', postContent);
             });
 
             function btnSaveClick() {
@@ -55,7 +54,7 @@
 
             function btnCancelClick() {
                 if (confirm("작성중인 내용은 저장되지 않습니다.")) {
-                    location.href = "/board/[(${boardId})]/list";
+                    history.back();
                 }
             }
 

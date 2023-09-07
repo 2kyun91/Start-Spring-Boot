@@ -14,6 +14,7 @@ import com.start.springboot.domain.post.dto.PostBoardDto;
 import com.start.springboot.domain.post.dto.PostDto;
 import com.start.springboot.domain.post.service.PostService;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.core.io.Resource;
 import org.springframework.data.domain.Page;
@@ -129,7 +130,9 @@ public class BoardController {
             @PathVariable("boardId") Long boardId,
             @PathVariable("postId") Long postId,
             ModelAndView mv) {
+        mv.addObject("isModify", true);
         mv = getModelAndView(boardId, postId, mv);
+
         List<BoardDto> boardDtos = boardService.getAllBoard();
         mv.addObject("boarList", boardDtos);
         return mv;
@@ -166,8 +169,14 @@ public class BoardController {
 
     private ModelAndView getModelAndView(Long boardId, Long postId, ModelAndView mv) {
         mv.setViewName("/board/main");
+        PostBoardDto postBoardDto = new PostBoardDto();
         String boardName = boardService.getBoardName(boardId);
-        PostBoardDto postBoardDto = postService.getPost(postId);
+
+        if (!ObjectUtils.isEmpty(mv.getModel().get("isModify"))) {
+            postBoardDto = postService.getPost(postId, true);
+        } else {
+            postBoardDto = postService.getPost(postId, false);
+        }
 
         mv.addObject("boardId", boardId);
         mv.addObject("boardName", boardName);

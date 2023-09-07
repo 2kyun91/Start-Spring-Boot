@@ -28,7 +28,8 @@
 
                 <div class="mb-3">
                     <label for="attachFiles" class="form-label">첨부파일</label>
-                    <input id="attachFiles" name="attachFiles" class="form-control form-control-lg" type="file" multiple>
+                    <input id="attachFiles" name="attachFiles" onchange="addListTag(this);" class="form-control form-control-lg" type="file" multiple>
+                    <ul id="fileList" class="list-group"></ul>
                 </div>
 
                 <div class="mb-3 ">

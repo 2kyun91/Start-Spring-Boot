@@ -85,7 +85,7 @@ public class PostService {
         return postRepository.getPostList(searchDto, pageable);
     }
 
-    public PostBoardDto getPost(Long postId) {
+    public PostBoardDto getPost(Long postId, boolean includeReply) {
         PostBoardDto postBoardDto = new PostBoardDto();
         Post post = getPostQueryMethod(postId);
 
@@ -96,13 +96,15 @@ public class PostService {
         postBoardDto.setPostViewCount(post.getPostViewCount());
         postBoardDto.setPostUpdateDate(post.getPostUpdateDate());
 
-        // 게시글의 답변
-        List<ReplyDto> replyDtos = new ArrayList<>();
-        post.getReplies().stream().forEach(reply -> {
-            replyDtos.add(reply.toDto(reply));
-        });
-        postBoardDto.setReplyDtos(replyDtos);
-        postBoardDto.setRepliesCount(replyDtos.size());
+        if (!includeReply) {
+            // 게시글의 답변
+            List<ReplyDto> replyDtos = new ArrayList<>();
+            post.getReplies().stream().forEach(reply -> {
+                replyDtos.add(reply.toDto(reply));
+            });
+            postBoardDto.setReplyDtos(replyDtos);
+            postBoardDto.setRepliesCount(replyDtos.size());
+        }
 
         // 게시글의 첨부파일
         List<AttachDto> attachDtos = new ArrayList<>();
