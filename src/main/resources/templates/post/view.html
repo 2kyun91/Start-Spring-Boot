@@ -14,6 +14,15 @@
                     <div class="form-floating m-3">
                         <h3 th:text="'제목 : ' + ${postDetail.postTitle}"></h3>
                     </div>
+                    <div class="form-floating m-3 border-top border-1">
+                        <div style="margin-top: 10px; font-size: x-large;">
+                            <div class="row">
+                                <div class="col" th:text="'작성일 : ' + ${#dates.format(postDetail.postUpdateDate, 'yyyy-MM-dd')}"></div>
+                                <div class="col"></div>
+                                <div class="col" th:text="'조회수 : ' + ${postDetail.postViewCount}"></div>
+                            </div>
+                        </div>
+                    </div>
                     <div class="form-floating m-3 border-top border-1" th:if="${postDetail.attachesCount > 0}">
                         <ul class="list-inline" style="margin-top: 10px;">
                             <li class="list-inline-item" style="font-size: x-large;">첨부파일 : </li>
@@ -29,6 +38,7 @@
 
             <div style="float: right;">
                 <button id="btnModify" type="button" onclick="btnModifyClick();" class="btn btn-outline-success">수정</button>
+                <button id="btnDelete" type="button" onclick="btnDeleteClick();" class="btn btn-outline-warning">삭제</button>
                 <button id="btnList" type="button" onclick="btnListClick();" class="btn btn-outline-danger">목록</button>
             </div>
         </section>

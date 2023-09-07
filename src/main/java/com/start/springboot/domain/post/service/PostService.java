@@ -94,6 +94,7 @@ public class PostService {
         postBoardDto.setPostContent(post.getPostContent());
         postBoardDto.setPostWriter(post.getPostWriter());
         postBoardDto.setPostViewCount(post.getPostViewCount());
+        postBoardDto.setPostUpdateDate(post.getPostUpdateDate());
 
         // 게시글의 답변
         List<ReplyDto> replyDtos = new ArrayList<>();

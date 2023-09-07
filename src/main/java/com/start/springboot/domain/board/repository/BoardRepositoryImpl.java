@@ -3,6 +3,7 @@ package com.start.springboot.domain.board.repository;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import com.start.springboot.domain.board.dto.BoardDto;
 import com.start.springboot.domain.board.entity.Board;
 import com.start.springboot.domain.post.dto.PostBoardDto;
 import lombok.RequiredArgsConstructor;
@@ -34,11 +35,11 @@ public class BoardRepositoryImpl implements BoardRepositoryCustom{
     }
 
     @Override
-    public List<PostBoardDto> getAllBoard() {
-        List<PostBoardDto> boardList =  jpaQueryFactory
+    public List<BoardDto> getAllBoard() {
+        List<BoardDto> boardList =  jpaQueryFactory
                 .select(
                         Projections.fields(
-                                PostBoardDto.class,
+                                BoardDto.class,
                                 board.boardId,
                                 board.boardName
                         )

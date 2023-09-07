@@ -15,19 +15,16 @@ import com.start.springboot.domain.post.dto.PostDto;
 import com.start.springboot.domain.post.service.PostService;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.HashMap;
 import java.util.List;
@@ -41,9 +38,6 @@ public class BoardController {
     private final PostService postService;
     private final AttachService attachService;
     private final FileStorageUtil fileStorageUtil;
-
-//    @Value("${spring.servlet.multipart.location}")
-//    private String uploadPath;
 
     @RequestMapping("/{boardId}/list")
     @ResponseBody
@@ -78,8 +72,8 @@ public class BoardController {
         mv.setViewName("/board/main");
         String boardName = boardService.getBoardName(boardId);
         if (boardName.equals("전체보기")) {
-            List<PostBoardDto> postBoardDtos = boardService.getAllBoard();
-            mv.addObject("boarList", postBoardDtos);
+            List<BoardDto> boardDtos = boardService.getAllBoard();
+            mv.addObject("boarList", boardDtos);
         }
 
         mv.addObject("boardId", boardId);
@@ -127,15 +121,25 @@ public class BoardController {
             @PathVariable("boardId") Long boardId,
             @PathVariable("postId") Long postId,
             ModelAndView mv) {
-        mv.setViewName("/board/main");
-        String boardName = boardService.getBoardName(boardId);
-        PostBoardDto postBoardDto = postService.getPost(postId);
+        return getModelAndView(boardId, postId, mv);
+    }
 
-        mv.addObject("boardId", boardId);
-        mv.addObject("boardName", boardName);
-        mv.addObject("postId", postId);
-        mv.addObject("postDetail", postBoardDto);
+    @GetMapping("/{boardId}/modify/{postId}")
+    public ModelAndView getModifyForm(
+            @PathVariable("boardId") Long boardId,
+            @PathVariable("postId") Long postId,
+            ModelAndView mv) {
+        mv = getModelAndView(boardId, postId, mv);
+        List<BoardDto> boardDtos = boardService.getAllBoard();
+        mv.addObject("boarList", boardDtos);
         return mv;
+    }
+
+    @PostMapping("/{boardId}/modify/{postId}")
+    @ResponseBody
+    public Map<String, Object> saveModifyForm() {
+        Map<String, Object> returnMap = new HashMap<>();
+        return  returnMap;
     }
 
     @GetMapping("/{boardId}/{postId}/download/{attachId}")
@@ -159,4 +163,17 @@ public class BoardController {
         return ResponseEntity.ok().header(HttpHeaders.CONTENT_DISPOSITION,
                 "attachment; filename=\"" + attachDto.getAttachOriginalName() + "\"").body(file);
     }
+
+    private ModelAndView getModelAndView(Long boardId, Long postId, ModelAndView mv) {
+        mv.setViewName("/board/main");
+        String boardName = boardService.getBoardName(boardId);
+        PostBoardDto postBoardDto = postService.getPost(postId);
+
+        mv.addObject("boardId", boardId);
+        mv.addObject("boardName", boardName);
+        mv.addObject("postId", postId);
+        mv.addObject("postDetail", postBoardDto);
+        return mv;
+    }
+
 }

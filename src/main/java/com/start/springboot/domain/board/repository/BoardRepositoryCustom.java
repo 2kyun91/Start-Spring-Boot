@@ -1,5 +1,6 @@
 package com.start.springboot.domain.board.repository;
 
+import com.start.springboot.domain.board.dto.BoardDto;
 import com.start.springboot.domain.board.entity.Board;
 import com.start.springboot.domain.post.dto.PostBoardDto;
 
@@ -10,5 +11,5 @@ public interface BoardRepositoryCustom {
 
     String getBoardName(Long boardId);
 
-    List<PostBoardDto> getAllBoard();
+    List<BoardDto> getAllBoard();
 }

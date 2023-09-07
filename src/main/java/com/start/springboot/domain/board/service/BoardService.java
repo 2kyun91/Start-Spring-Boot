@@ -27,7 +27,7 @@ public class BoardService {
         return boardRepository.getBoardName(boardId);
     }
 
-    public List<PostBoardDto> getAllBoard() {
+    public List<BoardDto> getAllBoard() {
         return boardRepository.getAllBoard();
     }
 
