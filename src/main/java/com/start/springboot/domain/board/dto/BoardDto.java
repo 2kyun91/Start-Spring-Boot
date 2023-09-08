@@ -20,7 +20,7 @@ public class BoardDto {
 
     private Set<Post> posts;
 
-    private String BoardName;
+    private String boardName;
 
     private String boardUseYn;
 
@@ -37,7 +37,7 @@ public class BoardDto {
                 .boardId(boardId)
                 .navBar(navBar)
                 .posts(posts)
-                .boardName(BoardName)
+                .boardName(boardName)
                 .boardUseYn(boardUseYn)
                 .boardCreateUser(boardCreateUser)
                 .boardUpdateUser(boardUpdateUser)

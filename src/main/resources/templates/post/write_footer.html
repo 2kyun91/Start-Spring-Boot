@@ -59,8 +59,17 @@
                 }
             }
 
+            let dataTranster = new DataTransfer();
+
+            function setFileData(obj) {
+                Array.from(obj.files)
+                    .forEach(file => {
+                        dataTranster.items.add(file);
+                    });
+            }
+
             function addListTag(obj) {
-                $("#fileList").html("");
+                setFileData(obj);
                 let files = Array.from(obj.files);
                 files.forEach(file => {
                     let htmlTag = '';
@@ -71,21 +80,20 @@
                         </li>`;
                     $("#fileList").append(htmlTag);
                 });
+                $('#attachFiles')[0].files = dataTranster.files;
             }
 
             function removeListTag(obj) {
-                let removeTargetId = obj.dataset.index;
-                let removeTarget = $("#"+removeTargetId);
-                let files = $('#attachFiles')[0].files;
-                let dataTranster = new DataTransfer();
-
-                Array.from(files)
-                    .filter(file => file.lastModified != removeTargetId)
-                    .forEach(file => {
-                        dataTranster.items.add(file);
-                    });
-                $('#attachFiles')[0].files = dataTranster.files;
-                removeTarget.remove();
+                if (obj.dataset.index) {
+                    let removeTargetId = obj.dataset.index;
+                    let removeTarget = $("#"+removeTargetId);
+                    let num = $("#fileList > li").index(removeTarget);
+                    dataTranster.items.remove(num);
+                    $('#attachFiles')[0].files = dataTranster.files;
+                    removeTarget.remove();
+                } else {
+                    obj.parentNode.remove();
+                }
             }
         </script>
     </th:block>

@@ -13,9 +13,7 @@
             <div class="mb-3">
                 <label for="boardId" class="form-label">게시판</label>
                 <select id="boardId" name="boardId" class="w-25 p-3 form-select" aria-label="Default select">
-                    <option th:if="${boardName eq '전체보기'}" value="" selected>게시판을 선택해주세요.</option>
-                    <option th:unless="${boardName eq '전체보기'}" th:value="${boardId}" th:text="${boardName}" selected></option>
-                    <option th:each="board : ${boarList}" th:if="${boardName eq '전체보기' and board.boardName ne '전체보기'}" th:value="${board.boardId}" th:text="${board.boardName}"></option>
+                    <option th:each="board : ${boarList}" th:if="${board.boardName ne '전체보기'}" th:value="${board.boardId}" th:text="${board.boardName}"></option>
                 </select>
                 <!-- 로그인 기능 구현되면 지우기 -->
                 <input id="postWriter" name="postWriter" value="자바" type="hidden">
@@ -26,16 +24,21 @@
                 <input id="postTitle" th:value="${postDetail.postTitle}" name="postTitle" class="form-control form-control-lg" type="text" placeholder="제목을 입력해주세요.">
             </div>
 
-            <!-- 여기서 부터 이어서... -->
-<!--            <div class="mb-3">-->
-<!--                <label for="attachFiles" class="form-label">첨부파일</label>-->
-<!--                <input id="attachFiles" name="attachFiles" onchange="addListTag(this);" class="form-control form-control-lg" type="file" multiple>-->
-<!--                <ul id="fileList" class="list-group"></ul>-->
-<!--            </div>-->
+            <div class="mb-3">
+                <label for="attachFiles" class="form-label">첨부파일</label>
+                <input id="attachFiles" name="attachFiles" onchange="addListTag(this);" class="form-control form-control-lg" type="file" multiple>
+                <ul id="fileList" class="list-group">
+                    <li th:if="${postDetail.attachesCount > 0}" th:each="attach : ${postDetail.attachDtos}" class="list-group-item list-group-item-secondary">
+                        [(${attach.attachOriginalName})]
+                        <input name="originalAttachFileId" th:value="${attach.attachId}" type="hidden">
+                        <button data-index="" onclick="removeListTag(this);" style="margin-left: 10px;" class='btn btn-danger' type="button">X</button>
+                    </li>
+                </ul>
+            </div>
 
             <div class="mb-3 ">
                 <label for="summernote" class="form-label">내용</label>
-                <div id="summernote"></div>
+                <div id="summernote" th:utext="${postDetail.postContent}"></div>
             </div>
 
             <div style="float: right;">

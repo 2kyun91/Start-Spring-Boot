@@ -91,14 +91,14 @@ public class BoardController {
         String boardName = boardService.getBoardName(boardId);
 
         if (!boardName.equals("전체보기")) {
-            BoardDto boardDto1 = new BoardDto();
-            boardDto1.setBoardId(boardId);
+            BoardDto boardDto = new BoardDto();
+            boardDto.setBoardId(boardId);
 
             PostDto postDto = new PostDto();
             postDto.setPostTitle(postBoardDto.getPostTitle());
             postDto.setPostContent(postBoardDto.getPostContent());
             postDto.setPostWriter(postBoardDto.getPostWriter());
-            postDto.setBoard(boardDto1.toEntity());
+            postDto.setBoard(boardDto.toEntity());
             postDto = postService.createPost(postDto);
 
             List<MultipartFile> files = postBoardDto.getAttachFiles();
@@ -140,8 +140,29 @@ public class BoardController {
 
     @PostMapping("/{boardId}/modify/{postId}")
     @ResponseBody
-    public Map<String, Object> saveModifyForm() {
+    public Map<String, Object> saveModifyForm(
+            @PathVariable("boardId") Long boardId,
+            @PathVariable("postId") Long postId,
+            PostBoardDto postBoardDto) {
         Map<String, Object> returnMap = new HashMap<>();
+        String boardName = boardService.getBoardName(boardId);
+
+        if (!boardName.equals("전체보기")) {
+            PostDto postDto = new PostDto();
+            postDto.setPostTitle(postBoardDto.getPostTitle());
+            postDto.setPostContent(postBoardDto.getPostContent());
+
+            if (boardId != postBoardDto.getBoardId()) {
+                BoardDto boardDto = new BoardDto();
+                boardDto.setBoardId(postBoardDto.getBoardId());
+                postDto.setBoard(boardDto.toEntity());
+            }
+
+            // 첨부파일 수정부터 이어서...
+            returnMap.put("postId", postDto.getPostId());
+        } else {
+            throw new CustomException(CommonErrorCode.INVALID_PARAMETER);
+        }
         return  returnMap;
     }
 

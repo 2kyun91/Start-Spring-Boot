@@ -35,6 +35,8 @@ public class PostBoardDto {
 
     private String boardName;
 
+    private List<String> originalAttachFileId;
+
     private List<MultipartFile> attachFiles;
 
     private List<AttachDto> attachDtos;

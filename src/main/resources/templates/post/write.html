@@ -13,9 +13,7 @@
                 <div class="mb-3">
                     <label for="boardId" class="form-label">게시판</label>
                     <select id="boardId" name="boardId" class="w-25 p-3 form-select" aria-label="Default select">
-                        <option th:if="${boardName eq '전체보기'}" value="" selected>게시판을 선택해주세요.</option>
-                        <option th:unless="${boardName eq '전체보기'}" th:value="${boardId}" th:text="${boardName}" selected></option>
-                        <option th:each="board : ${boarList}" th:if="${boardName eq '전체보기' and board.boardName ne '전체보기'}" th:value="${board.boardId}" th:text="${board.boardName}"></option>
+                        <option th:value="${boardId}" th:text="${boardName}"></option>
                     </select>
                     <!-- 로그인 기능 구현되면 지우기 -->
                     <input id="postWriter" name="postWriter" value="자바" type="hidden">
