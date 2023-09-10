@@ -6,6 +6,7 @@ import com.start.springboot.domain.attach.entity.Attach;
 import com.start.springboot.domain.attach.service.AttachService;
 import com.start.springboot.domain.board.BoardRepositoryTests;
 import com.start.springboot.domain.board.dto.BoardDto;
+import com.start.springboot.domain.board.entity.Board;
 import com.start.springboot.domain.post.dto.PostBoardDto;
 import com.start.springboot.domain.post.dto.PostDto;
 import com.start.springboot.domain.post.entity.Post;

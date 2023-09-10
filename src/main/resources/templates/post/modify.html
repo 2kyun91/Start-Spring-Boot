@@ -30,7 +30,7 @@
                 <ul id="fileList" class="list-group">
                     <li th:if="${postDetail.attachesCount > 0}" th:each="attach : ${postDetail.attachDtos}" class="list-group-item list-group-item-secondary">
                         [(${attach.attachOriginalName})]
-                        <input name="originalAttachFileId" th:value="${attach.attachId}" type="hidden">
+                        <input name="originalAttachId" th:value="${attach.attachId}" type="hidden">
                         <button data-index="" onclick="removeListTag(this);" style="margin-left: 10px;" class='btn btn-danger' type="button">X</button>
                     </li>
                 </ul>

@@ -11,6 +11,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Component;
+import org.springframework.util.FileSystemUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
@@ -92,5 +93,10 @@ public class FileStorageUtil {
         catch (MalformedURLException e) {
             throw new RuntimeException("Could not read file: " + filename, e);
         }
+    }
+
+    public void deleteFile(String filename) {
+        Path file = load(filename);
+        FileSystemUtils.deleteRecursively(file.toFile());
     }
 }

@@ -16,12 +16,15 @@ import com.start.springboot.domain.post.dto.PostDto;
 import com.start.springboot.domain.post.entity.Post;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.ObjectUtils;
+import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.support.PageableExecutionUtils;
 import org.springframework.stereotype.Repository;
 
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -37,9 +40,10 @@ public class PostRepositoryImpl implements PostRepositoryCustom {
     @Override
     public long updatePost(Post postObj) {
         return jpaQueryFactory.update(post)
+                .set(post.board.boardId, postObj.getBoard().getBoardId())
                 .set(post.postTitle, postObj.getPostTitle())
                 .set(post.postContent, postObj.getPostContent())
-                .set(post.postUpdateDate, postObj.getPostUpdateDate())
+                .set(post.postUpdateDate, Timestamp.valueOf(LocalDateTime.now()))
                 .where(post.postId.eq(postObj.getPostId()))
                 .execute();
     }

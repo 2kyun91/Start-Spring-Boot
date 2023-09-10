@@ -7,6 +7,7 @@ import com.start.springboot.common.page.Pagination;
 import com.start.springboot.common.search.SearchDto;
 import com.start.springboot.common.util.FileStorageUtil;
 import com.start.springboot.domain.attach.dto.AttachDto;
+import com.start.springboot.domain.attach.entity.Attach;
 import com.start.springboot.domain.attach.service.AttachService;
 import com.start.springboot.domain.board.dto.BoardDto;
 import com.start.springboot.domain.board.service.BoardService;
@@ -99,16 +100,9 @@ public class BoardController {
             postDto.setPostContent(postBoardDto.getPostContent());
             postDto.setPostWriter(postBoardDto.getPostWriter());
             postDto.setBoard(boardDto.toEntity());
-            postDto = postService.createPost(postDto);
+            postDto = postService.createPost(postDto); // 주소값 변경
 
-            List<MultipartFile> files = postBoardDto.getAttachFiles();
-            fileStorageUtil.uploadFiles(files);
-
-            List<AttachDto> attachDtos = fileStorageUtil.getAttachDtos();
-            for (AttachDto attachDto : attachDtos) {
-                attachDto.setPost(postDto.toEntity());
-                attachService.createAttach(attachDto);
-            }
+            saveAttachFiles(postBoardDto, postDto);
             returnMap.put("postId", postDto.getPostId());
         } else {
             throw new CustomException(CommonErrorCode.INVALID_PARAMETER);
@@ -123,6 +117,28 @@ public class BoardController {
             @PathVariable("postId") Long postId,
             ModelAndView mv) {
         return getModelAndView(boardId, postId, mv);
+    }
+
+    @GetMapping("/{boardId}/{postId}/download/{attachId}")
+    @ResponseBody
+    public ResponseEntity<Resource> downloadFile(
+            @PathVariable("boardId") Long boardId,
+            @PathVariable("postId") Long postId,
+            @PathVariable("attachId") Long attachId) {
+        AttachDto attachDto = attachService.getAttach(attachId);
+
+        Long testPostId = attachDto.getPost().getPostId();
+        System.out.println("testPostId : " + testPostId);
+        String testPostTitle = attachDto.getPost().getPostTitle();
+        System.out.println("testPostTitle : " + testPostTitle);
+
+        if (!attachDto.getPost().getPostId().equals(postId)) {
+            throw new CustomException(CommonErrorCode.INVALID_PARAMETER);
+        }
+        String filename = attachDto.getAttachPhysicalName();
+        Resource file = fileStorageUtil.downloadFile(filename);
+        return ResponseEntity.ok().header(HttpHeaders.CONTENT_DISPOSITION,
+                "attachment; filename=\"" + attachDto.getAttachOriginalName() + "\"").body(file);
     }
 
     @GetMapping("/{boardId}/modify/{postId}")
@@ -149,43 +165,43 @@ public class BoardController {
 
         if (!boardName.equals("전체보기")) {
             PostDto postDto = new PostDto();
+            postDto.setPostId(postId);
             postDto.setPostTitle(postBoardDto.getPostTitle());
             postDto.setPostContent(postBoardDto.getPostContent());
 
-            if (boardId != postBoardDto.getBoardId()) {
-                BoardDto boardDto = new BoardDto();
-                boardDto.setBoardId(postBoardDto.getBoardId());
-                postDto.setBoard(boardDto.toEntity());
+            BoardDto boardDto = new BoardDto();
+            boardDto.setBoardId(postBoardDto.getBoardId());
+            postDto.setBoard(boardDto.toEntity());
+
+            // 사용자와 게시글 작성자 검증이 되었다는 가정
+            if (true) {
+                List<Attach> originalAttachList = attachService.getAttachList(postId);
+                if (ObjectUtils.isEmpty(postBoardDto.getOriginalAttachId())) {
+                    originalAttachList.forEach(originalAttach -> {
+                        String filename = originalAttach.getAttachPhysicalName();
+                        fileStorageUtil.deleteFile(filename);
+                    });
+                } else {
+                    postBoardDto.getOriginalAttachId().forEach(attachId -> {
+                        originalAttachList.forEach(originalAttach -> {
+                            if (!originalAttach.getAttachId().equals(attachId)) {
+                                String filename = originalAttach.getAttachPhysicalName();
+                                fileStorageUtil.deleteFile(filename);
+                            }
+                        });
+                    });
+                }
+
+                attachService.deleteAttachList(postBoardDto);
+                postService.updatePost(postDto);
+                saveAttachFiles(postBoardDto, postDto);
             }
 
-            // 첨부파일 수정부터 이어서...
             returnMap.put("postId", postDto.getPostId());
         } else {
             throw new CustomException(CommonErrorCode.INVALID_PARAMETER);
         }
         return  returnMap;
-    }
-
-    @GetMapping("/{boardId}/{postId}/download/{attachId}")
-    @ResponseBody
-    public ResponseEntity<Resource> downloadFile(
-            @PathVariable("boardId") Long boardId,
-            @PathVariable("postId") Long postId,
-            @PathVariable("attachId") Long attachId) {
-        AttachDto attachDto = attachService.getAttach(attachId);
-
-        Long testPostId = attachDto.getPost().getPostId();
-        System.out.println("testPostId : " + testPostId);
-        String testPostTitle = attachDto.getPost().getPostTitle();
-        System.out.println("testPostTitle : " + testPostTitle);
-
-        if (!attachDto.getPost().getPostId().equals(postId)) {
-            throw new CustomException(CommonErrorCode.INVALID_PARAMETER);
-        }
-        String filename = attachDto.getAttachPhysicalName();
-        Resource file = fileStorageUtil.downloadFile(filename);
-        return ResponseEntity.ok().header(HttpHeaders.CONTENT_DISPOSITION,
-                "attachment; filename=\"" + attachDto.getAttachOriginalName() + "\"").body(file);
     }
 
     private ModelAndView getModelAndView(Long boardId, Long postId, ModelAndView mv) {
@@ -206,4 +222,14 @@ public class BoardController {
         return mv;
     }
 
+    private void saveAttachFiles(PostBoardDto postBoardDto, PostDto postDto) {
+        List<MultipartFile> files = postBoardDto.getAttachFiles();
+        fileStorageUtil.uploadFiles(files);
+
+        List<AttachDto> attachDtos = fileStorageUtil.getAttachDtos();
+        for (AttachDto attachDto : attachDtos) {
+            attachDto.setPost(postDto.toEntity());
+            attachService.createAttach(attachDto);
+        }
+    }
 }
