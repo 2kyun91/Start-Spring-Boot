@@ -41,7 +41,7 @@ public class BoardController {
     private final AttachService attachService;
     private final FileStorageUtil fileStorageUtil;
 
-    @RequestMapping("/{boardId}/list")
+    @RequestMapping("/list/{boardId}")
     @ResponseBody
     public ModelAndView getPostList(
             @PathVariable("boardId") Long boardId,
@@ -67,7 +67,7 @@ public class BoardController {
         return mv;
     }
 
-    @GetMapping("/{boardId}/write")
+    @GetMapping("/writeForm/{boardId}")
     public ModelAndView getWriteForm(
             @PathVariable("boardId") Long boardId,
             ModelAndView mv) {
@@ -83,7 +83,7 @@ public class BoardController {
         return mv;
     }
 
-    @PostMapping("/{boardId}/write")
+    @PostMapping("/writeForm/{boardId}")
     @ResponseBody
     public Map<String, Object> saveWriteForm(
             @PathVariable("boardId") Long boardId,
@@ -111,7 +111,7 @@ public class BoardController {
         return returnMap;
     }
 
-    @GetMapping("/{boardId}/view/{postId}")
+    @GetMapping("/detail/{boardId}/{postId}")
     public ModelAndView getPost(
             @PathVariable("boardId") Long boardId,
             @PathVariable("postId") Long postId,
@@ -119,7 +119,7 @@ public class BoardController {
         return getModelAndView(boardId, postId, mv);
     }
 
-    @GetMapping("/{boardId}/{postId}/download/{attachId}")
+    @GetMapping("/download/{boardId}/{postId}/{attachId}")
     @ResponseBody
     public ResponseEntity<Resource> downloadFile(
             @PathVariable("boardId") Long boardId,
@@ -141,7 +141,7 @@ public class BoardController {
                 "attachment; filename=\"" + attachDto.getAttachOriginalName() + "\"").body(file);
     }
 
-    @GetMapping("/{boardId}/modify/{postId}")
+    @GetMapping("/modifyForm/{boardId}/{postId}")
     public ModelAndView getModifyForm(
             @PathVariable("boardId") Long boardId,
             @PathVariable("postId") Long postId,
@@ -154,7 +154,7 @@ public class BoardController {
         return mv;
     }
 
-    @PostMapping("/{boardId}/modify/{postId}")
+    @PostMapping("/modifyForm/{boardId}/{postId}")
     @ResponseBody
     public Map<String, Object> saveModifyForm(
             @PathVariable("boardId") Long boardId,

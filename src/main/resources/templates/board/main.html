@@ -4,9 +4,9 @@
 <div layout:fragment="content">
     <div id="content">
         <div th:if="${#httpServletRequest.requestURI.contains('/list')}" th:insert="~{post/list::list}"/>
-        <div th:if="${#httpServletRequest.requestURI.contains('/write')}" th:insert="~{post/write::write}"/>
-        <div th:if="${#httpServletRequest.requestURI.contains('/view')}" th:insert="~{post/view::view}"/>
-        <div th:if="${#httpServletRequest.requestURI.contains('/modify')}" th:insert="~{post/modify::modify}"/>
+        <div th:if="${#httpServletRequest.requestURI.contains('/writeForm')}" th:insert="~{post/writeForm::writeForm}"/>
+        <div th:if="${#httpServletRequest.requestURI.contains('/detail')}" th:insert="~{post/detail::detail}"/>
+        <div th:if="${#httpServletRequest.requestURI.contains('/modifyForm')}" th:insert="~{post/modifyForm::modifyForm}"/>
     </div>
 </div>
 

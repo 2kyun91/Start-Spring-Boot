@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<div th:fragment="detail_footer">
+    <th:block layout:fragment="script">
+        <script th:inline="javascript" th:src="@{/js/form_common.js}"></script>
+        <script th:inline="javascript" th:src="@{/js/reply.js}"></script>
+
+        <script th:inline="javascript">
+            let mode;
+
+            $(function () {
+                let obj = {
+                    "boardId" : "[(${boardId})]",
+                    "postId" : "[(${postId})]"
+                };
+                replyManager.getAll(obj, appendReplyList);
+            });
+
+            function btnPostReplyClick() {
+                mode = "ADD";
+                let obj = {
+                    "boardId" : "[(${boardId})]",
+                    "postId" : "[(${postId})]",
+                    "replyWriter" : $("#replyWriter").val(),
+                    "replyContent" : $("#replyContent").val()
+                }
+                replyManager.add(obj, appendReplyList);
+                $("#replyContent").val("");
+            }
+
+            function appendReplyList(replyList) {
+                $("#replyTable").html("");
+                let htmlTag = '';
+                let replies = Array.from(replyList.replyDtos);
+                if (replies.length > 0) {
+                    replies.forEach(reply => {
+                        htmlTag += `<tr>
+                                        <th scope="row">${reply.replyId}</th>
+                                        <td>${reply.replyContent}</td>
+                                        <td>${reply.replyWriter}</td>
+                                        <td>` + formatDate(reply.replyUpdateDate) + `</td>
+                                    </tr>`;
+                    });
+                } else {
+                    htmlTag += `<tr>
+                                    <td th:colspan="4" style="text-align: center;">댓글이 없습니다.</td>
+                                </tr>`;
+                }
+                $("#replyTable").append(htmlTag);
+            }
+
+            function formatDate(replyUpdateDate) {
+                return new Date(replyUpdateDate).toISOString().split("T")[0];
+            }
+
+            function btnModifyClick() {
+                location.href = "/board/modifyForm/[(${boardId})]/[(${postId})]";
+            }
+
+            function btnDeleteClick() {
+                alert("게시글 삭제하기");
+            }
+
+            function btnListClick() {
+                location.href = "/board/list/[(${boardId})]";
+            }
+
+            function downloadFile(postId, attachId) {
+                location.href = "/board/download/[(${boardId})]/" + postId + "/" + attachId;
+            }
+        </script>
+    </th:block>
+</div>
+</html>

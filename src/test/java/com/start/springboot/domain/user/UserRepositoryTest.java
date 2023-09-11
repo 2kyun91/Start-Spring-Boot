@@ -10,7 +10,6 @@ import org.springframework.boot.test.context.TestConfiguration;
 import java.util.stream.IntStream;
 
 @SpringBootTest
-@TestConfiguration
 public class UserRepositoryTest {
     private final UserService userService;
 

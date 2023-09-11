@@ -30,7 +30,7 @@
             <em class="text-primary" style="font-style: normal; font-size: x-large;" th:if="${#strings.length(totalElements) >= 3}" th:text="${#numbers.formatInteger(totalElements, 3, 'COMMA')}"></em>
             <em class="text-primary" style="font-style: normal; font-size: x-large;" th:unless="${#strings.length(totalElements) >= 3}" th:text="${totalElements}"></em>
             개의 게시글이 있습니다.
-            <a th:if="${boardName ne '전체보기'}" th:href="@{/board/{boardId}/write(boardId=${boardId})}" class="btn btn-primary" style="float: right;" type="button">글쓰기</a>
+            <a th:if="${boardName ne '전체보기'}" th:href="@{/board/writeForm/{boardId}(boardId=${boardId})}" class="btn btn-primary" style="float: right;" type="button">글쓰기</a>
         </p>
     </div>
 </html>

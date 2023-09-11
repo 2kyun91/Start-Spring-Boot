@@ -1,5 +1,5 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-    <div th:fragment="write">
+    <div th:fragment="writeForm">
         <section class="text-bg-light">
             <h1 style="text-align: center;">게시판 글쓰기</h1>
             <br>
@@ -41,6 +41,6 @@
                 </div>
             </form>
         </section>
-        <div th:replace="~{post/write_footer::write_footer}"/>
+        <div th:replace="~{post/writeForm_footer::writeForm_footer}"/>
     </div>
 </html>

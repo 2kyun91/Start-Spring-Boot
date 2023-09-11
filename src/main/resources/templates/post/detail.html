@@ -1,5 +1,5 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-    <div th:fragment="view">
+    <div th:fragment="detail">
         <section class="text-bg-light">
             <h1 style="text-align: center;">게시글 상세</h1>
             <br>
@@ -33,6 +33,29 @@
                         </ul>
                     </div>
                     <div class="form-floating m-3 border border-3" style="font-size: x-large; text-align: center;" th:utext="${postDetail.postContent}"></div>
+
+                    <!-- 댓글영역 -->
+                    <div class="form-floating m-3">
+                        <table class="table table-dark table-striped" style="text-align: center;">
+                            <thead>
+                            <tr>
+                                <th scope="col">번호</th>
+                                <th scope="col">내용</th>
+                                <th scope="col">작성자</th>
+                                <th scope="col">작성일</th>
+                            </tr>
+                            </thead>
+                            <tbody id="replyTable"></tbody>
+                        </table>
+                    </div>
+
+                    <div class="form-floating m-3">
+                        <textarea id="replyContent" class="form-control" style="height: 100px; margin-bottom: 10px;"></textarea>
+                        <label for="replyContent">댓글을 입력하세요.</label>
+                        <!-- 로그인 기능 구현되면 지우기 -->
+                        <input id="replyWriter" name="replyWriter" value="스프링" type="hidden">
+                        <button id="btnPostReply" type="button" onclick="btnPostReplyClick();" class="btn btn btn-outline-primary">확인</button>
+                    </div>
                 </div>
             </main>
 
@@ -42,6 +65,6 @@
                 <button id="btnList" type="button" onclick="btnListClick();" class="btn btn-outline-danger">목록</button>
             </div>
         </section>
-        <div th:replace="~{post/view_footer::view_footer}"/>
+        <div th:replace="~{post/detail_footer::detail_footer}"/>
     </div>
 </html>

@@ -1,5 +1,6 @@
 package com.start.springboot.domain.reply.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.start.springboot.domain.post.entity.Post;
 import com.start.springboot.domain.reply.dto.ReplyDto;
 import lombok.Builder;
@@ -42,7 +43,8 @@ public class Reply {
     private String replyShowYn; /* 댓글 노출 여부 */
 
     @NotNull
-    @ManyToOne
+    @JsonIgnore
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "reply_post_id")
     private Post post;
 

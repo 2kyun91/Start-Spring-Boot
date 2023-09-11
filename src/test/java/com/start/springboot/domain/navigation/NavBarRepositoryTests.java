@@ -8,7 +8,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.TestConfiguration;
 
 @SpringBootTest
-@TestConfiguration
 public class NavBarRepositoryTests {
     private final NavBarService navBarService;
 

@@ -1,0 +1,16 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<div th:fragment="writeForm_footer">
+    <th:block layout:fragment="script">
+        <script th:inline="javascript" th:src="@{/js/form_common.js}"></script>
+
+        <script th:inline="javascript">
+            function btnCancelClick() {
+                if (confirm("작성중인 내용은 저장되지 않습니다.")) {
+                    location.href = "/board/list/[(${boardId})]";
+                }
+            }
+        </script>
+    </th:block>
+</div>
+</html>

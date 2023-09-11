@@ -17,7 +17,6 @@ import javax.transaction.Transactional;
 import java.sql.Timestamp;
 
 @SpringBootTest
-@TestConfiguration
 @Import({NavBarRepositoryTests.class})
 public class BoardRepositoryTests {
     private final BoardService boardService;
