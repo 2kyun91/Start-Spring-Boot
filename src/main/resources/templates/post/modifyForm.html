@@ -42,7 +42,7 @@
             </div>
 
             <div style="float: right;">
-                <button id="btnSave" type="button" onclick="btnSaveClick();" class="btn btn-outline-success">확인</button>
+                <button id="btnSave" type="button" th:value="${boardId}" th:onclick="btnSaveClick(this.getAttribute('value'))" class="btn btn-outline-success">확인</button>
                 <button id="btnCancel" type="button" onclick="btnCancelClick();" class="btn btn-outline-danger">취소</button>
             </div>
         </form>

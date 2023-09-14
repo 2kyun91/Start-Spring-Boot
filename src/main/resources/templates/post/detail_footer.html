@@ -16,16 +16,18 @@
                 replyManager.getAll(obj, appendReplyList);
             });
 
-            function btnPostReplyClick() {
-                mode = "ADD";
-                let obj = {
-                    "boardId" : "[(${boardId})]",
-                    "postId" : "[(${postId})]",
-                    "replyWriter" : $("#replyWriter").val(),
-                    "replyContent" : $("#replyContent").val()
+            function btnPostModifyClick() {
+                location.href = "/board/modifyForm/[(${boardId})]/[(${postId})]";
+            }
+
+            function btnPostDeleteClick() {
+                if (confirm('삭제하시겠습니까?')) {
+                    location.href = "/board/delete/[(${boardId})]/[(${postId})]";
                 }
-                replyManager.add(obj, appendReplyList);
-                $("#replyContent").val("");
+            }
+
+            function btnPostListClick() {
+                location.href = "/board/list/[(${boardId})]";
             }
 
             function appendReplyList(replyList) {
@@ -39,30 +41,65 @@
                                         <td>${reply.replyContent}</td>
                                         <td>${reply.replyWriter}</td>
                                         <td>` + formatDate(reply.replyUpdateDate) + `</td>
+                                        <td>
+                                            <button id="btnReplyModify" onclick="btnReplyModifyClick(${reply.replyId}, '${reply.replyContent}')" type="button" class="btn btn-primary">수정</button>
+                                            <button id="btnReplyDelete" onclick="btnReplyDeleteClick(${reply.replyId})" type="button" class="btn btn-danger">삭제</button>
+                                        </td>
                                     </tr>`;
                     });
                 } else {
                     htmlTag += `<tr>
-                                    <td th:colspan="4" style="text-align: center;">댓글이 없습니다.</td>
+                                    <td colspan="5" style="text-align: center;">댓글이 없습니다.</td>
                                 </tr>`;
                 }
                 $("#replyTable").append(htmlTag);
             }
 
+            function btnAddReplyClick() {
+                mode = "ADD";
+                let obj = {
+                    "boardId" : "[(${boardId})]",
+                    "postId" : "[(${postId})]",
+                    "replyWriter" : $("#replyWriter").val(),
+                    "replyContent" : $("#replyContent").val()
+                }
+                replyManager.add(obj, appendReplyList);
+                $("#replyContent").val("");
+            }
+
+            function btnReplyModifyClick(replyId, replyContent) {
+                $("#modifyReplyFormModal").modal("show");
+                $("#modifyReplyId").val(replyId);
+                $("#modalBody").val(replyContent);
+            }
+
+            function btnModifyReplyContentClick() {
+                let obj = {
+                    "boardId" : "[(${boardId})]",
+                    "postId" : "[(${postId})]",
+                    "replyId" : $("#modifyReplyId").val(),
+                    "replyWriter" : $("#replyWriter").val(),
+                    "replyContent" : $("#modalBody").val()
+                }
+                replyManager.update(obj, appendReplyList);
+                $("#modifyReplyFormModal").modal("hide");
+                $("#modifyReplyId").val("");
+                $("#modalBody").val("");
+            }
+
+            function btnReplyDeleteClick(replyId) {
+                if (confirm('삭제하시겠습니까?')) {
+                    let obj = {
+                        "boardId" : "[(${boardId})]",
+                        "postId" : "[(${postId})]",
+                        "replyId" : replyId
+                    }
+                    replyManager.remove(obj, appendReplyList);
+                }
+            }
+
             function formatDate(replyUpdateDate) {
                 return new Date(replyUpdateDate).toISOString().split("T")[0];
-            }
-
-            function btnModifyClick() {
-                location.href = "/board/modifyForm/[(${boardId})]/[(${postId})]";
-            }
-
-            function btnDeleteClick() {
-                alert("게시글 삭제하기");
-            }
-
-            function btnListClick() {
-                location.href = "/board/list/[(${boardId})]";
             }
 
             function downloadFile(postId, attachId) {

@@ -13,7 +13,9 @@ import com.start.springboot.domain.board.dto.BoardDto;
 import com.start.springboot.domain.board.service.BoardService;
 import com.start.springboot.domain.post.dto.PostBoardDto;
 import com.start.springboot.domain.post.dto.PostDto;
+import com.start.springboot.domain.post.entity.Post;
 import com.start.springboot.domain.post.service.PostService;
+import com.start.springboot.domain.reply.service.ReplyService;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -39,6 +41,7 @@ public class BoardController {
     private final BoardService boardService;
     private final PostService postService;
     private final AttachService attachService;
+    private final ReplyService replyService;
     private final FileStorageUtil fileStorageUtil;
 
     @RequestMapping("/list/{boardId}")
@@ -132,7 +135,7 @@ public class BoardController {
         String testPostTitle = attachDto.getPost().getPostTitle();
         System.out.println("testPostTitle : " + testPostTitle);
 
-        if (!attachDto.getPost().getPostId().equals(postId)) {
+        if (!postId.equals(attachDto.getPost().getPostId())) {
             throw new CustomException(CommonErrorCode.INVALID_PARAMETER);
         }
         String filename = attachDto.getAttachPhysicalName();
@@ -202,6 +205,27 @@ public class BoardController {
             throw new CustomException(CommonErrorCode.INVALID_PARAMETER);
         }
         return  returnMap;
+    }
+
+    @GetMapping("/delete/{boardId}/{postId}")
+    public String deletePost(
+            @PathVariable("boardId") Long boardId,
+            @PathVariable("postId") Long postId,
+            ModelAndView mv) {
+        String boardName = boardService.getBoardName(boardId);
+        if (!boardName.equals("전체보기")) {
+            Post post = postService.getPostQueryMethod(postId);
+            if (boardId.equals(post.getBoard().getBoardId())) {
+                PostBoardDto postBoardDto = new PostBoardDto();
+                postBoardDto.setPostId(postId);
+                attachService.deleteAttachList(postBoardDto);
+                replyService.deleteReplyByPostId(postId);
+                postService.deletePost(postId);
+            }
+        } else {
+            throw new CustomException(CommonErrorCode.INVALID_PARAMETER);
+        }
+        return "redirect:/board/list/" + boardId;
     }
 
     private ModelAndView getModelAndView(Long boardId, Long postId, ModelAndView mv) {

@@ -43,6 +43,7 @@
                                 <th scope="col">내용</th>
                                 <th scope="col">작성자</th>
                                 <th scope="col">작성일</th>
+                                <th scope="col">수정/삭제</th>
                             </tr>
                             </thead>
                             <tbody id="replyTable"></tbody>
@@ -54,17 +55,38 @@
                         <label for="replyContent">댓글을 입력하세요.</label>
                         <!-- 로그인 기능 구현되면 지우기 -->
                         <input id="replyWriter" name="replyWriter" value="스프링" type="hidden">
-                        <button id="btnPostReply" type="button" onclick="btnPostReplyClick();" class="btn btn btn-outline-primary">확인</button>
+                        <button id="btnAddReply" type="button" onclick="btnAddReplyClick();" class="btn btn btn-outline-primary">확인</button>
                     </div>
                 </div>
             </main>
 
             <div style="float: right;">
-                <button id="btnModify" type="button" onclick="btnModifyClick();" class="btn btn-outline-success">수정</button>
-                <button id="btnDelete" type="button" onclick="btnDeleteClick();" class="btn btn-outline-warning">삭제</button>
-                <button id="btnList" type="button" onclick="btnListClick();" class="btn btn-outline-danger">목록</button>
+                <button id="btnPostModify" type="button" onclick="btnPostModifyClick();" class="btn btn-outline-success">수정</button>
+                <button id="btnPostDelete" type="button" onclick="btnPostDeleteClick();" class="btn btn-outline-warning">삭제</button>
+                <button id="btnPostList" type="button" onclick="btnPostListClick();" class="btn btn-outline-danger">목록</button>
             </div>
         </section>
+
+        <!-- Modal -->
+        <div class="modal fade" id="modifyReplyFormModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="staticBackdropLabel">댓글 수정</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <input id="modifyReplyId" name="modifyReplyId" value="" type="hidden">
+                        <textarea id="modalBody" class="form-control"></textarea>
+                    </div>
+                    <div class="modal-footer">
+                        <button id="modifyReplyContent" onclick="btnModifyReplyContentClick();" type="button" class="btn btn-primary">확인</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <div th:replace="~{post/detail_footer::detail_footer}"/>
     </div>
 </html>

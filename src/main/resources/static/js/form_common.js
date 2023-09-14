@@ -22,7 +22,7 @@ $(function () {
     // $('#summernote').summernote('code', markupStr); // set
 });
 
-function btnSaveClick() {
+function btnSaveClick(boardId) {
     let url = $(location).attr('pathname');
     let form = $('#writePostForm')[0];
     let formData = new FormData(form);
@@ -38,14 +38,14 @@ function btnSaveClick() {
         processData: false,
         contentType: false,
         success: function (result) {
-            location.href = "/board/detail/[(${boardId})]/" + result.postId;
+            location.href = "/board/detail/" + boardId + "/" + result.postId;
         },
         error: function (request, status, error) {
             if (request.responseJSON) {
                 alert(request.responseJSON.message);
             }
         }
-    })
+    });
 }
 
 let dataTranster = new DataTransfer();

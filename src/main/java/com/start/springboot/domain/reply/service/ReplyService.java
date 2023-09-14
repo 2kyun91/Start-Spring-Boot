@@ -33,4 +33,8 @@ public class ReplyService {
     public void deleteReply(Long replyId) {
         replyRepository.deleteById(replyId);
     }
+
+    public void deleteReplyByPostId(Long postId) {
+        replyRepository.deleteReplyByPostId(postId);
+    }
 }

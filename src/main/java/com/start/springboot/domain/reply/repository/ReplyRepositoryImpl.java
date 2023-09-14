@@ -32,4 +32,9 @@ public class ReplyRepositoryImpl implements ReplyRepositoryCustom{
                 .where(reply.post.postId.eq(postId)).fetch();
         return replyDtoList;
     }
+
+    @Override
+    public Long deleteReplyByPostId(Long postId) {
+        return jpaQueryFactory.delete(reply).where(reply.post.postId.eq(postId)).execute();
+    }
 }
