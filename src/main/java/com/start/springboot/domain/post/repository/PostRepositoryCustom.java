@@ -10,7 +10,7 @@ import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
-interface PostRepositoryCustom {
+public interface PostRepositoryCustom {
     long updatePost(Post post);
 
     List<Post> findByPostTitleContaining(String postTitle);
