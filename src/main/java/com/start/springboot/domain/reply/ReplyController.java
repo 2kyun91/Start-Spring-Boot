@@ -3,14 +3,12 @@ package com.start.springboot.domain.reply;
 import com.start.springboot.common.errors.errorcode.CommonErrorCode;
 import com.start.springboot.common.errors.exception.CustomException;
 import com.start.springboot.domain.board.service.BoardService;
-import com.start.springboot.domain.post.dto.PostDto;
 import com.start.springboot.domain.post.entity.Post;
 import com.start.springboot.domain.post.service.PostService;
 import com.start.springboot.domain.reply.dto.ReplyDto;
 import com.start.springboot.domain.reply.entity.Reply;
 import com.start.springboot.domain.reply.service.ReplyService;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
 import java.sql.Timestamp;
@@ -22,7 +20,6 @@ import java.util.Map;
 @RestController
 @RequestMapping("/replies")
 @RequiredArgsConstructor
-@Slf4j
 public class ReplyController {
     private final BoardService boardService;
     private final PostService postService;

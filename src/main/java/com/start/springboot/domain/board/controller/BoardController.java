@@ -218,9 +218,12 @@ public class BoardController {
             if (boardId.equals(post.getBoard().getBoardId())) {
                 PostBoardDto postBoardDto = new PostBoardDto();
                 postBoardDto.setPostId(postId);
-                // in 구문 사용해서 한번에 처리해보기
                 //레스트 템플릿 이용해서 api 정보 받아보기
-                //로그인 기능 구현해보기
+                List<Attach> attachList = attachService.getAttachList(postId);
+                attachList.forEach(attach -> {
+                    String filename = attach.getAttachPhysicalName();
+                    fileStorageUtil.deleteFile(filename);
+                });
                 attachService.deleteAttachList(postBoardDto);
                 replyService.deleteReplyByPostId(postId);
                 postService.deletePost(postId);
