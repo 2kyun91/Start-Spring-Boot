@@ -15,6 +15,7 @@ import static com.start.springboot.domain.user.entity.QUser.user;
 @RequiredArgsConstructor
 public class UserRepositoryImpl implements UserRepositoryCustom {
     private final JPAQueryFactory jpaQueryFactory;
+
     @Override
     public List<UserDto> findByIdContains(String userId) {
         return jpaQueryFactory

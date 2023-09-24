@@ -11,7 +11,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 //@SpringBootTest
 @WebMvcTest(SampleController.class)
-public class SampelControllerTests {
+public class SampleControllerTests {
 
     @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
     @Autowired

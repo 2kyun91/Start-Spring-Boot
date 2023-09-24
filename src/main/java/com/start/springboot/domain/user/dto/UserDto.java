@@ -2,6 +2,7 @@ package com.start.springboot.domain.user.dto;
 
 import com.start.springboot.domain.profile.entity.Profile;
 import com.start.springboot.domain.user.entity.User;
+import com.start.springboot.domain.userRole.entity.UserRole;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -25,7 +26,7 @@ public class UserDto {
 
     private String userPhNumber;
 
-    // private Role userRole;
+    private List<UserRole> userRoles;
 
     private String userBlockYn;
 
@@ -43,6 +44,7 @@ public class UserDto {
                 .userNickName(userNickName)
                 .userEmail(userEmail)
                 .userPhNumber(userPhNumber)
+                .userRoles(userRoles)
                 .userBlockYn(userBlockYn)
                 .profiles(profiles)
                 .userCountCreateDate(userCountCreateDate)
