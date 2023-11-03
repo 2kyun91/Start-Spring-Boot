@@ -4,10 +4,13 @@ import com.start.springboot.domain.user.dto.UserDto;
 import com.start.springboot.domain.user.service.UserService;
 import com.start.springboot.sample.dto.Sample;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.repository.query.Param;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.HashMap;
@@ -17,6 +20,7 @@ import java.util.Map;
 //@RestController
 @Controller
 @RequiredArgsConstructor
+@Slf4j
 public class SampleController {
     private final UserService userService;
 
@@ -52,6 +56,20 @@ public class SampleController {
         model.addAttribute("userDtoList", userDtoList);
         model.addAttribute("msg", "스타트 스프링 부트 - 블로그 만들기");
         return "sample/sample";
+    }
+
+    @Secured({"ROLE_USER"})
+    @RequestMapping("/userSecret")
+    public String forUserSecret() {
+        log.info("-------------- USER Secret --------------");
+        return "sample/userSecret";
+    }
+
+    @Secured({"ROLE_ADMIN"})
+    @RequestMapping("/adminSecret")
+    public String forAdminSecret() {
+        log.info("-------------- ADMIN Secret --------------");
+        return "sample/adminSecret";
     }
 }
 

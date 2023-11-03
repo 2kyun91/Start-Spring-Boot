@@ -1,0 +1,12 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{/layout/default_layout}">
+
+<div layout:fragment="content">
+    <div class="panel-body">
+        <div class="alert alert-danger" role="alert">
+            <h2>페이지 접근 권한이 없습니다.</h2>
+            로그인 화면으로 이동 <a th:href="@{/login}">로그인</a>
+        </div>
+    </div>
+</div>
+</html>
