@@ -130,10 +130,10 @@ public class BoardController {
             @PathVariable("attachId") Long attachId) {
         AttachDto attachDto = attachService.getAttach(attachId);
 
-        Long testPostId = attachDto.getPost().getPostId();
-        System.out.println("testPostId : " + testPostId);
-        String testPostTitle = attachDto.getPost().getPostTitle();
-        System.out.println("testPostTitle : " + testPostTitle);
+//        Long testPostId = attachDto.getPost().getPostId();
+//        System.out.println("testPostId : " + testPostId);
+//        String testPostTitle = attachDto.getPost().getPostTitle();
+//        System.out.println("testPostTitle : " + testPostTitle);
 
         if (!postId.equals(attachDto.getPost().getPostId())) {
             throw new CustomException(CommonErrorCode.INVALID_PARAMETER);

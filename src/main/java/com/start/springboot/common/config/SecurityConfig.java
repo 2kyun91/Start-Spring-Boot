@@ -10,7 +10,6 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.annotation.web.configurers.RequestCacheConfigurer;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -74,12 +73,12 @@ public class SecurityConfig {
                                         .and()
                                         .rememberMe().key("encryptSample")
                                         .tokenRepository(getJDBCRepository())
-                                        .tokenValiditySeconds(60*60*24);
+                                        .tokenValiditySeconds(60*60*24)
 //                                        .antMatchers("/board/**", "/replies/**").hasRole("MANAGER");
 //                                        .anyRequest().authenticated();
-//                                        .and()
+                                        .and()
 //                                        .csrf().csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse());
-//                                        .csrf().disable();
+                                        .csrf().disable();
                             } catch (Exception e) {
                                 log.error("Error in SecurityFilterChain...");
                             }

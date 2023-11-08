@@ -1,4 +1,4 @@
-package com.start.springboot.domain.reply;
+package com.start.springboot.domain.reply.controller;
 
 import com.start.springboot.common.errors.errorcode.CommonErrorCode;
 import com.start.springboot.common.errors.exception.CustomException;

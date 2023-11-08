@@ -1,9 +1,9 @@
 package com.start.springboot.domain.user;
 
+import com.start.springboot.common.mapper.UserMapper;
 import com.start.springboot.domain.user.dto.UserDto;
 import com.start.springboot.domain.user.service.UserService;
 import com.start.springboot.domain.userRole.dto.UserRoleDto;
-import com.start.springboot.domain.userRole.entity.UserRole;
 import com.start.springboot.domain.userRole.service.UserRoleService;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
@@ -12,7 +12,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -21,13 +24,15 @@ public class UserRepositoryTest {
     private final UserService userService;
     private final UserRoleService userRoleService;
     private final PasswordEncoder passwordEncoder;
+    private final UserMapper userMapper;
     Logger log = (Logger) LoggerFactory.getLogger(UserRepositoryTest.class);
 
     @Autowired
-    public UserRepositoryTest(UserService userService, UserRoleService userRoleService, PasswordEncoder passwordEncoder) {
+    public UserRepositoryTest(UserService userService, UserRoleService userRoleService, PasswordEncoder passwordEncoder, UserMapper userMapper) {
         this.userService = userService;
         this.userRoleService = userRoleService;
         this.passwordEncoder = passwordEncoder;
+        this.userMapper = userMapper;
     }
 
     @Test
@@ -45,7 +50,7 @@ public class UserRepositoryTest {
         IntStream.range(1, 5).forEach(i -> {
             UserDto userDto = new UserDto();
             userDto.setUserId("testUser" + i);
-            userDto.setUserPwd("qwe123!@#");
+            userDto.setUserPwd(passwordEncoder.encode("qwe123!@#"));
             userDto.setUserName("자바" + i);
             userDto.setUserEmail("test" + i + "@gmail.com");
             userDto = userService.createUser(userDto);
@@ -69,6 +74,24 @@ public class UserRepositoryTest {
     @Test
     public void testGetUser() {
         UserDto userDto = userService.getUser("testUser1");
+        log.info(userDto.toString());
+    }
+
+    @Test
+    public void testGetUserWithJpaAndMybatis() {
+//        UserDto jpaResultUserDto = userService.getUser("testUser1");
+//        log.info("---------- Jpa Result ----------");
+//        log.info(jpaResultUserDto.toString());
+
+        UserDto myBatisResultUserDto1 = userMapper.getUserByUserId("testUser1");
+        log.info("---------- Mybatis Result 1 ----------");
+        log.info(myBatisResultUserDto1.toString());
+
+        UserDto userDto = new UserDto();
+        userDto.setUserId("testUser1");
+        userDto.setUserName("자바1");
+        userDto = userMapper.getUserByObject(userDto);
+        log.info("---------- Mybatis Result 2 ----------");
         log.info(userDto.toString());
     }
 
